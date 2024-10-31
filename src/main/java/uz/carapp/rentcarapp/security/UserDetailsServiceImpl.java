@@ -1,0 +1,100 @@
+package uz.carapp.rentcarapp.security;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import uz.carapp.rentcarapp.domain.Authority;
+import uz.carapp.rentcarapp.domain.User;
+import uz.carapp.rentcarapp.repository.UserRepository;
+import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
+import uz.carapp.rentcarapp.service.dto.UserAccountDTO;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Authenticate a user from the database.
+ */
+@Component("userDetailsService")
+public class UserDetailsServiceImpl implements UserDetailsService {
+
+    private final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+    private final UserRepository userRepository;
+
+
+    private final PasswordEncoder passwordEncoder;
+
+    public UserDetailsServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String login) throws UserNotActivatedException{
+        log.info("Authenticating {}", login);
+
+        return userRepository
+                .findOneWithAuthoritiesByLogin(login)
+                .map(user -> createSpringSecurityUser(login, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
+    }
+
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+        if (!user.isActivated()) {
+            throw new UserNotActivatedException("User: '" + lowercaseLogin + "' was not activated");
+        }
+        List<GrantedAuthority> grantedAuthorities = user
+                .getAuthorities()
+                .stream()
+                .map(Authority::getName)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
+    }
+
+    public Long getUserIdByLogin() {
+        return userRepository.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+    }
+
+
+    public Optional<User> getUserWithAuthorities() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+    }
+
+
+    private UserAccountDTO getUserAccountData() {
+        return getUserWithAuthorities().map(UserAccountDTO::new)
+                .orElseThrow(() -> new BadRequestCustomException("User could not be found","",""));
+    }
+
+    public Boolean changePassword(String currentClearTextPassword, String newPassword, String repeatPassword) {
+        if(!newPassword.equals(repeatPassword)) {
+            throw new BadRequestCustomException("password and repeat password is not the same", null,null);
+        }
+        SecurityUtils
+                .getCurrentUserLogin()
+                .flatMap(userRepository::findOneByLogin)
+                .ifPresent(user -> {
+                    String currentEncryptedPassword = user.getPassword();
+                    if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                        throw new BadRequestCustomException("Current password is wrong!!", null,null);
+                    }
+                    String encryptedPassword = passwordEncoder.encode(newPassword);
+                    user.setPassword(encryptedPassword);
+                    userRepository.save(user);
+                    log.info("Changed password for User: {}", user);
+                });
+        return true;
+    }
+}

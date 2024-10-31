@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: RENT_CAR_APP
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rentcardb
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: MmFjNjk1YjkwNjM4NWEzM2ViNmQyNDVhNjE2NzI0ZDk1OTRjZGJkMjI4Zjk4NmZmNjM2OGQ1YjI0ZDA0YTRkMTVjYzk5MDA1MjMxNDAzOGY1MDBhZDg5YWUxZTE0MDI2YmQ1YjQxOTJjZjg1NzQzMDJmYjk2MTFmMWU4ODJkNDY=
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+  clientApp:
+    name: 'lmscanvasappApp'
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1 # Modify according to your server's URL
+
+jwt:
+  secret: rentcarr2024
+
+server:
+  base:
+    url:   http://localhost:8181 #http://185.251.25.52:8181 # #
+  port: 8181
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
