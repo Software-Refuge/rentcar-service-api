@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import uz.carapp.rentcarapp.security.AuthoritiesConstants;
 import uz.carapp.rentcarapp.security.jwt.JWTFilter;
 
 @EnableMethodSecurity
@@ -45,6 +46,8 @@ public class SecurityConfig {
                             .requestMatchers("/api/account/change-password").authenticated()
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/actuator/**").permitAll()
+                            //#--------------Merchant------------------------#
+                            .requestMatchers("/api/v1/merchants/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

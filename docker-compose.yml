@@ -1,0 +1,65 @@
+services:
+  client-backend:
+    image: client:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8181:8181"
+    depends_on:
+      - service-db
+    environment:
+      - SERVER_PORT= 8181
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://service-db/rentcardb
+      - SPRING_PROFILES_ACTIVE=ssl
+      - MINIO_ENDPOINT=http://minio:9002
+      - MINIO_ACCESS_KEY=minadmin
+      - MINIO_SECRET_KEY=minpassadmin
+    volumes:
+      - /etc/letsencrypt/live/api-lms.momoit.uz:/etc/letsencrypt/live/api-lms.momoit.uz
+    #entrypoint: [ "sh", "-c", "openssl pkcs12 -export -in /etc/letsencrypt/live/api-lms.momoit.uz/cert.pem -inkey /etc/letsencrypt/live/api-lms.momoit.uz/privkey.pem -out keystore.p12 -name lms_momoit -CAfile /etc/letsencrypt/live/api-lms.momoit.uz/chain.pem -caname root -password pass:lms_2024 && java -jar lmsapp.jar" ]
+
+  service-db:
+    image: postgres:14.7-alpine
+    environment:
+      POSTGRES_DB: rentcardb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5432:5432"
+    volumes:
+      #- ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:7
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  minio:
+    image: docker.io/bitnami/minio:2022
+    ports:
+      - '9000:9000'
+      - '9002:9001'
+    container_name: minio
+    volumes:
+      - minio_data:/var/lib/minio
+    environment:
+      - MINIO_ROOT_USER=minadmin
+      - MINIO_ROOT_PASSWORD=minpassadmin
+      - MINIO_DEFAULT_BUCKETS=rentcarbucket
+#    user: "1001:1001"
+    #command: server /data #if this line not added, minio not run
+
+volumes:
+  db-data:
+  pgadmin-data:
+  minio_data:

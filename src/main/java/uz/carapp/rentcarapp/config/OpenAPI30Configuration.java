@@ -24,7 +24,8 @@ public class OpenAPI30Configuration {
                 "/api/account/auth",
                 "/api/account/me",
                 "/api/account/profile",
-                "/api/account/change-password"
+                "/api/account/change-password",
+                "/api/v1/merchants/**"
         };
         return GroupedOpenApi.builder().group("LMS Application").pathsToMatch(path).build();
     }
