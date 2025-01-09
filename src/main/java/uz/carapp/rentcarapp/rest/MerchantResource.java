@@ -115,9 +115,11 @@ public class MerchantResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Get list of merchants")
-    public ResponseEntity<List<MerchantDTO>> getAllMerchants(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.info("REST request to get a page of Merchants");
-        Page<MerchantDTO> page = merchantService.findAll(pageable);
+    public ResponseEntity<List<MerchantDTO>> getAllMerchants(
+            @RequestParam(value = "search", required = false) String search,
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        LOG.info("REST request to get a page of Merchants by search:{}",search);
+        Page<MerchantDTO> page = merchantService.findAll(search,pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

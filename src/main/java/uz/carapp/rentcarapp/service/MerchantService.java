@@ -29,10 +29,11 @@ public interface MerchantService {
     /**
      * Get all the merchants.
      *
+     * @param search the for search
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<MerchantDTO> findAll(Pageable pageable);
+    Page<MerchantDTO> findAll(String search, Pageable pageable);
 
     /**
      * Get the "id" merchant.

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import uz.carapp.rentcarapp.domain.Merchant;
 import uz.carapp.rentcarapp.repository.MerchantRepository;
 import uz.carapp.rentcarapp.service.MerchantService;
@@ -60,9 +61,11 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<MerchantDTO> findAll(Pageable pageable) {
+    public Page<MerchantDTO> findAll(String search, Pageable pageable) {
         LOG.info("Request to get all Merchants");
-        return merchantRepository.findAll(pageable).map(merchantMapper::toDto);
+        if(StringUtils.hasText(search))
+            search = search.toLowerCase();
+        return merchantRepository.findAll(search, pageable).map(merchantMapper::toDto);
     }
 
     @Override
