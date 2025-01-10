@@ -45,9 +45,11 @@ public class SecurityConfig {
                             .requestMatchers("/api/account/profile").authenticated()
                             .requestMatchers("/api/account/change-password").authenticated()
                             .requestMatchers("/h2-console/**").permitAll()
-                            .requestMatchers("/actuator/**").permitAll()
+                            .requestMatchers("/actuator/prometheus").permitAll()
+                            .requestMatchers("/metrics").permitAll()
                             //#--------------Merchant------------------------#
                             .requestMatchers("/api/v1/merchants/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/merchant-branches/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

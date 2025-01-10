@@ -25,8 +25,9 @@ public class OpenAPI30Configuration {
                 "/api/account/me",
                 "/api/account/profile",
                 "/api/account/change-password",
-                "/api/v1/merchants/**"
+                "/api/v1/merchants/**",
+                "/api/v1/merchant-branches/**"
         };
-        return GroupedOpenApi.builder().group("LMS Application").pathsToMatch(path).build();
+        return GroupedOpenApi.builder().group("RentCarAPP Application").pathsToMatch(path).build();
     }
 }
