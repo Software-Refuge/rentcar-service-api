@@ -50,6 +50,8 @@ public class SecurityConfig {
                             //#--------------Merchant------------------------#
                             .requestMatchers("/api/v1/merchants/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/v1/merchant-branches/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------Brand---------------------------#
+                            .requestMatchers("/api/v1/brands").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

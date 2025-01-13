@@ -41,7 +41,7 @@ jwt:
 
 server:
   base:
-    url:   http://localhost:8181 #http://185.251.25.52:8181 # #
+    url:   http://108.181.185.189:8181 #http://localhost:8181 #http://185.251.25.52:8181 # #
   port: 8181
 
 management:

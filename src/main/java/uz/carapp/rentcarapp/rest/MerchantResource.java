@@ -70,8 +70,7 @@ public class MerchantResource {
     public ResponseEntity<MerchantDTO> createMerchant(@Valid @RequestBody MerchantDTO merchantDTO) throws URISyntaxException {
         LOG.info("REST request to save Merchant : {}", merchantDTO);
         merchantDTO = merchantService.save(merchantDTO);
-        return ResponseEntity.created(new URI("/api/merchants/" + merchantDTO.getId()))
-            .body(merchantDTO);
+        return ResponseEntity.ok().body(merchantDTO);
     }
 
     /**
@@ -145,7 +144,7 @@ public class MerchantResource {
      *
      * @param id the id of the merchantDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
+     *//*
     @DeleteMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -156,5 +155,5 @@ public class MerchantResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
+    }*/
 }
