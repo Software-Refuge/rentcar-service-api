@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Brand;
 import uz.carapp.rentcarapp.repository.BrandRepository;
-import uz.carapp.rentcarapp.repository.search.BrandSearchRepository;
 import uz.carapp.rentcarapp.service.BrandService;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
 import uz.carapp.rentcarapp.service.mapper.BrandMapper;
