@@ -48,6 +48,7 @@ public class InitialDataLoader implements CommandLineRunner {
             adminUser.setPhoneNumber("+998991234567");
             adminUser.setStatus(true);
             adminUser.setActivated(true);
+            adminUser.setGender(true);
             adminUser.setAuthorities(adminAuthorities);
             adminUser.setCreatedBy(Constants.SYSTEM);
             userRepository.save(adminUser);
