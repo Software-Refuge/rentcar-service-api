@@ -1,6 +1,5 @@
 package uz.carapp.rentcarapp.service.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

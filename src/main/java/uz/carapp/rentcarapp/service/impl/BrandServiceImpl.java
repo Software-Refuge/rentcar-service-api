@@ -8,6 +8,8 @@ import uz.carapp.rentcarapp.domain.Brand;
 import uz.carapp.rentcarapp.repository.BrandRepository;
 import uz.carapp.rentcarapp.service.BrandService;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
+import uz.carapp.rentcarapp.service.dto.BrandEditDTO;
+import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.BrandMapper;
 
 import java.util.LinkedList;
@@ -36,9 +38,9 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandDTO save(BrandDTO brandDTO) {
-        LOG.debug("Request to save Brand : {}", brandDTO);
-        Brand brand = brandMapper.toEntity(brandDTO);
+    public BrandDTO save(BrandSaveDTO brandSaveDTO) {
+        LOG.info("Request to save Brand : {}", brandSaveDTO);
+        Brand brand = brandMapper.toEntity(brandSaveDTO);
         brand = brandRepository.save(brand);
         return brandMapper.toDto(brand);
     }
@@ -52,13 +54,13 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Optional<BrandDTO> partialUpdate(BrandDTO brandDTO) {
-        LOG.debug("Request to partially update Brand : {}", brandDTO);
+    public Optional<BrandDTO> partialUpdate(BrandEditDTO brandEditDTO) {
+        LOG.info("Request to partially update Brand : {}", brandEditDTO);
 
         return brandRepository
-            .findById(brandDTO.getId())
+            .findById(brandEditDTO.getId())
             .map(existingBrand -> {
-                brandMapper.partialUpdate(existingBrand, brandDTO);
+                brandMapper.partialUpdate(existingBrand, brandEditDTO);
 
                 return existingBrand;
             })

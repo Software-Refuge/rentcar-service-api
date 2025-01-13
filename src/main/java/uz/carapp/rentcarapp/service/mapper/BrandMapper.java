@@ -1,13 +1,12 @@
 package uz.carapp.rentcarapp.service.mapper;
 
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.domain.Brand;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
+import uz.carapp.rentcarapp.service.dto.BrandEditDTO;
+import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
 
 /**
  * Mapper for the entity {@link Brand} and its DTO {@link BrandDTO}.
@@ -21,4 +20,9 @@ public interface BrandMapper extends EntityMapper<BrandDTO, Brand> {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     AttachmentDTO toDtoAttachmentId(Attachment attachment);
+
+    Brand toEntity(BrandSaveDTO dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Brand partialUpdate(@MappingTarget Brand brand, BrandEditDTO brandEditDTO);
 }

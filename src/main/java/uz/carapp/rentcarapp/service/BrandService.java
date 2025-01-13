@@ -1,6 +1,8 @@
 package uz.carapp.rentcarapp.service;
 
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
+import uz.carapp.rentcarapp.service.dto.BrandEditDTO;
+import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +14,10 @@ public interface BrandService {
     /**
      * Save a brand.
      *
-     * @param brandDTO the entity to save.
+     * @param brandSaveDTO the entity to save.
      * @return the persisted entity.
      */
-    BrandDTO save(BrandDTO brandDTO);
+    BrandDTO save(BrandSaveDTO brandSaveDTO);
 
     /**
      * Updates a brand.
@@ -28,10 +30,10 @@ public interface BrandService {
     /**
      * Partially updates a brand.
      *
-     * @param brandDTO the entity to update partially.
+     * @param brandEditDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<BrandDTO> partialUpdate(BrandDTO brandDTO);
+    Optional<BrandDTO> partialUpdate(BrandEditDTO brandEditDTO);
 
     /**
      * Get all the brands.

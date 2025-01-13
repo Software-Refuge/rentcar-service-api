@@ -18,6 +18,8 @@ import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.security.AuthoritiesConstants;
 import uz.carapp.rentcarapp.service.BrandService;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
+import uz.carapp.rentcarapp.service.dto.BrandEditDTO;
+import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -54,7 +56,7 @@ public class BrandResource {
     /**
      * {@code POST  /brands} : Create a new brand.
      *
-     * @param brandDTO the brandDTO to create.
+     * @param brandSaveDTO the brandDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new brandDTO, or with status {@code 400 (Bad Request)} if the brand has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -62,16 +64,16 @@ public class BrandResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Create brand")
-    public ResponseEntity<BrandDTO> createBrand(@Valid @RequestBody BrandDTO brandDTO) throws URISyntaxException {
-        LOG.info("REST request to save Brand : {}", brandDTO);
-        brandDTO = brandService.save(brandDTO);
-        return ResponseEntity.ok(brandDTO);
+    public ResponseEntity<BrandDTO> createBrand(@Valid @RequestBody BrandSaveDTO brandSaveDTO) throws URISyntaxException {
+        LOG.info("REST request to save Brand : {}", brandSaveDTO);
+        BrandDTO savedBrand = brandService.save(brandSaveDTO);
+        return ResponseEntity.ok(savedBrand);
     }
 
     /**
      * {@code PATCH  /brands/:id} : Partial updates given fields of an existing brand, field will ignore if it is null
      *
-     * @param brandDTO the brandDTO to update.
+     * @param brandEditDTO the brandDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated brandDTO,
      * or with status {@code 400 (Bad Request)} if the brandDTO is not valid,
      * or with status {@code 404 (Not Found)} if the brandDTO is not found,
@@ -83,22 +85,22 @@ public class BrandResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Update brand")
     public ResponseEntity<BrandDTO> partialUpdateBrand(
-        @NotNull @RequestBody BrandDTO brandDTO
+        @NotNull @RequestBody BrandEditDTO brandEditDTO
     ) throws URISyntaxException {
-        LOG.info("REST request to partial update Brand partially : {}", brandDTO);
-        if (brandDTO.getId() == null) {
+        LOG.info("REST request to partial update Brand partially : {}", brandEditDTO);
+        if (brandEditDTO.getId() == null) {
             throw new BadRequestCustomException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        if (!brandRepository.existsById(brandDTO.getId())) {
+        if (!brandRepository.existsById(brandEditDTO.getId())) {
             throw new BadRequestCustomException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<BrandDTO> result = brandService.partialUpdate(brandDTO);
+        Optional<BrandDTO> result = brandService.partialUpdate(brandEditDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, brandDTO.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, brandEditDTO.getId().toString())
         );
     }
 
