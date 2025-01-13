@@ -13,6 +13,7 @@ import org.hibernate.annotations.BatchSize;
 import uz.carapp.rentcarapp.config.Constants;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,7 +64,12 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     private boolean activated = false;
 
     private String phoneNumber;
+
     private boolean status;
+
+    private boolean gender;
+
+    private Instant birthdate;
 
     @Size(max = 20)
     @Column(name = "activation_key", length = 20)

@@ -31,6 +31,7 @@ public class InitialDataLoader implements CommandLineRunner {
             authorityRepository.save(new Authority(AuthoritiesConstants.ADMIN));
             authorityRepository.save(new Authority(AuthoritiesConstants.CONTENT_MANAGER));
             authorityRepository.save(new Authority(AuthoritiesConstants.SALE_MANAGER));
+            authorityRepository.save(new Authority(AuthoritiesConstants.USER));
         }
 
         // On StartUp add one user for managing.
@@ -50,8 +51,6 @@ public class InitialDataLoader implements CommandLineRunner {
             adminUser.setAuthorities(adminAuthorities);
             adminUser.setCreatedBy(Constants.SYSTEM);
             userRepository.save(adminUser);
-
         }
-
     }
 }

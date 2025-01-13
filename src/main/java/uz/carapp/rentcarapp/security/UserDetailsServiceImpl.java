@@ -1,8 +1,13 @@
 package uz.carapp.rentcarapp.security;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,12 +19,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Authority;
 import uz.carapp.rentcarapp.domain.User;
+import uz.carapp.rentcarapp.repository.AuthorityRepository;
 import uz.carapp.rentcarapp.repository.UserRepository;
 import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.service.dto.UserAccountDTO;
+import uz.carapp.rentcarapp.service.dto.UserRegDTO;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -31,11 +38,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     private final UserRepository userRepository;
 
+    private final AuthorityRepository authorityRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+    public UserDetailsServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -97,4 +106,41 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 });
         return true;
     }
+
+    public void createUser(@Valid UserRegDTO userRegDTO) {
+
+        User user = new User();
+
+        user.setLogin(user.getLogin());
+        user.setLastName(userRegDTO.getLastName());
+        user.setFirstName(userRegDTO.getFirstName());
+        user.setPassword(passwordEncoder.encode(userRegDTO.getPassword()));
+        user.setLogin(userRegDTO.getEmail());
+        user.setEmail(userRegDTO.getEmail());
+        user.setActivated(userRegDTO.isStatus());
+        user.setGender(userRegDTO.isGender());
+        user.setBirthdate(userRegDTO.getBirthDate());
+        user.setStatus(userRegDTO.isStatus());
+        user.setPhoneNumber(user.getPhoneNumber());
+        user.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        Set<Authority> authorities;
+        authorities = new HashSet<>(Collections.singletonList(authorityRepository.findByName(AuthoritiesConstants.USER)));
+        user.setAuthorities(authorities);
+
+        userRepository.save(user);
+    }
+
+    public Page<UserRegDTO> findAll(Pageable pageable) {
+        List<UserRegDTO> list = userRepository.findAll(pageable).map(user -> {
+            UserRegDTO userRegDTO = new UserRegDTO();
+            userRegDTO.setLastName(user.getLastName());
+            userRegDTO.setFirstName(user.getFirstName());
+            userRegDTO.setBirthDate(user.getBirthdate());
+            userRegDTO.setEmail(user.getEmail());
+            userRegDTO.setRoles(user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
+            return userRegDTO;
+        }).stream().toList();
+        return new PageImpl<>(list);
+    }
+
 }
