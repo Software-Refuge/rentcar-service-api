@@ -23,6 +23,7 @@ import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.security.AuthoritiesConstants;
 import uz.carapp.rentcarapp.service.MerchantService;
 import uz.carapp.rentcarapp.service.dto.MerchantDTO;
+import uz.carapp.rentcarapp.service.dto.MerchantEditDTO;
 import uz.carapp.rentcarapp.service.dto.MerchantSaveDTO;
 
 import java.net.URI;
@@ -89,18 +90,18 @@ public class MerchantResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Update merchant")
     public ResponseEntity<Void> partialUpdateMerchant(
-        @NotNull @RequestBody MerchantDTO merchantDTO
+        @NotNull @RequestBody MerchantEditDTO merchantEditDTO
     ) throws URISyntaxException {
-        LOG.info("REST request to partial update Merchant partially : {}",  merchantDTO);
-        if (merchantDTO.getId() == null) {
+        LOG.info("REST request to partial update Merchant partially : {}",  merchantEditDTO);
+        if (merchantEditDTO.getId() == null) {
             throw new BadRequestCustomException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        if (!merchantRepository.existsById(merchantDTO.getId())) {
+        if (!merchantRepository.existsById(merchantEditDTO.getId())) {
             throw new BadRequestCustomException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        merchantService.partialUpdate(merchantDTO);
+        merchantService.partialUpdate(merchantEditDTO);
 
         return ResponseEntity.ok().build();
     }

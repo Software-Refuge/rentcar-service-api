@@ -3,6 +3,7 @@ package uz.carapp.rentcarapp.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.carapp.rentcarapp.service.dto.MerchantDTO;
+import uz.carapp.rentcarapp.service.dto.MerchantEditDTO;
 import uz.carapp.rentcarapp.service.dto.MerchantSaveDTO;
 
 import java.util.Optional;
@@ -22,10 +23,10 @@ public interface MerchantService {
     /**
      * Partially updates a merchant.
      *
-     * @param merchantDTO the entity to update partially.
+     * @param merchantEditDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<MerchantDTO> partialUpdate(MerchantDTO merchantDTO);
+    Optional<MerchantDTO> partialUpdate(MerchantEditDTO merchantEditDTO);
 
     /**
      * Get all the merchants.

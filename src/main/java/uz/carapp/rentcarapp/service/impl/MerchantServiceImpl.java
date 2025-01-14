@@ -13,6 +13,7 @@ import uz.carapp.rentcarapp.repository.UserRepository;
 import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.service.MerchantService;
 import uz.carapp.rentcarapp.service.dto.MerchantDTO;
+import uz.carapp.rentcarapp.service.dto.MerchantEditDTO;
 import uz.carapp.rentcarapp.service.dto.MerchantSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.MerchantMapper;
 
@@ -61,13 +62,13 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Optional<MerchantDTO> partialUpdate(MerchantDTO merchantDTO) {
-        LOG.info("Request to partially update Merchant : {}", merchantDTO);
+    public Optional<MerchantDTO> partialUpdate(MerchantEditDTO merchantEditDTO) {
+        LOG.info("Request to partially update Merchant : {}", merchantEditDTO);
 
         return merchantRepository
-            .findById(merchantDTO.getId())
+            .findById(merchantEditDTO.getId())
             .map(existingMerchant -> {
-                merchantMapper.partialUpdate(existingMerchant, merchantDTO);
+                merchantMapper.partialUpdate(existingMerchant, merchantEditDTO);
 
                 return existingMerchant;
             })
