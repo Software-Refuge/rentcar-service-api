@@ -1,3 +1,4 @@
+
 package uz.carapp.rentcarapp.service.dto;
 
 import jakarta.validation.constraints.NotNull;
@@ -5,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link uz.carapp.rentcarapp.domain.Merchant} entity.
@@ -13,7 +13,7 @@ import java.util.Objects;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
-public class MerchantDTO implements Serializable {
+public class MerchantSaveDTO implements Serializable {
 
     private Long id;
 
@@ -30,5 +30,5 @@ public class MerchantDTO implements Serializable {
 
     private String address;
 
-    private UserDTO user;
+    private Long userId;
 }

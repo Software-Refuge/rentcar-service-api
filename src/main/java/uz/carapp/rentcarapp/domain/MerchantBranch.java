@@ -27,8 +27,11 @@ public class MerchantBranch {
     @Column(name = "address", length = 4000)
     private String address;
 
-    @Column(name = "location", length = 4000)
-    private String location;
+    @Column(name = "latitude")
+    private String latitude;
+
+    @Column(name = "longitude")
+    private String longitude;
 
     @Column(name = "phone", length = 15)
     private String phone;

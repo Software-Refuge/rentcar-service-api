@@ -14,7 +14,9 @@ public class MerchantBranchEditDTO implements Serializable {
 
     private String address;
 
-    private String location;
+    private String latitude;
+
+    private String longitude;
 
     private String phone;
 }

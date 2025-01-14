@@ -23,6 +23,7 @@ import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.security.AuthoritiesConstants;
 import uz.carapp.rentcarapp.service.MerchantService;
 import uz.carapp.rentcarapp.service.dto.MerchantDTO;
+import uz.carapp.rentcarapp.service.dto.MerchantSaveDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -59,7 +60,7 @@ public class MerchantResource {
     /**
      * {@code POST  /merchants} : Create a new merchant.
      *
-     * @param merchantDTO the merchantDTO to create.
+     * @param merchantSaveDTO the merchantDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new merchantDTO, or with status {@code 400 (Bad Request)} if the merchant has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -67,9 +68,9 @@ public class MerchantResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Create merchant")
-    public ResponseEntity<MerchantDTO> createMerchant(@Valid @RequestBody MerchantDTO merchantDTO) throws URISyntaxException {
-        LOG.info("REST request to save Merchant : {}", merchantDTO);
-        merchantDTO = merchantService.save(merchantDTO);
+    public ResponseEntity<MerchantDTO> createMerchant(@Valid @RequestBody MerchantSaveDTO merchantSaveDTO) throws URISyntaxException {
+        LOG.info("REST request to save Merchant : {}", merchantSaveDTO);
+        MerchantDTO merchantDTO = merchantService.save(merchantSaveDTO);
         return ResponseEntity.ok().body(merchantDTO);
     }
 

@@ -46,4 +46,8 @@ public class Merchant implements Serializable {
 
     @Column(name = "address")
     private String address;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private User user;
+
 }

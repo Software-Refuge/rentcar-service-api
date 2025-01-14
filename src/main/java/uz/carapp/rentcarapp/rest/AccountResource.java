@@ -111,7 +111,7 @@ public class AccountResource {
     @GetMapping("/account/list")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    @Operation(summary = "Create user")
+    @Operation(summary = "Get list of users")
     public ResponseEntity<List<UserRegDTO>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.info("REST request to get all users");
         Page<UserRegDTO> page = userService.findAll(pageable);

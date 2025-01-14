@@ -1,5 +1,6 @@
 package uz.carapp.rentcarapp.service.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,9 @@ public class MerchantBranchDTO implements Serializable {
 
     private String address;
 
-    private String location;
+    private String latitude;
+
+    private String longitude;
 
     private String phone;
 

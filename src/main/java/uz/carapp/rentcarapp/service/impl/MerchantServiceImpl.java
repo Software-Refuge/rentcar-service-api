@@ -11,6 +11,7 @@ import uz.carapp.rentcarapp.domain.Merchant;
 import uz.carapp.rentcarapp.repository.MerchantRepository;
 import uz.carapp.rentcarapp.service.MerchantService;
 import uz.carapp.rentcarapp.service.dto.MerchantDTO;
+import uz.carapp.rentcarapp.service.dto.MerchantSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.MerchantMapper;
 
 import java.util.Optional;
@@ -37,9 +38,9 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public MerchantDTO save(MerchantDTO merchantDTO) {
-        LOG.info("Request to save Merchant : {}", merchantDTO);
-        Merchant merchant = merchantMapper.toEntity(merchantDTO);
+    public MerchantDTO save(MerchantSaveDTO merchantSaveDTO) {
+        LOG.info("Request to save Merchant : {}", merchantSaveDTO);
+        Merchant merchant = merchantMapper.toEntity(merchantSaveDTO);
         merchant = merchantRepository.save(merchant);
         return merchantMapper.toDto(merchant);
     }
