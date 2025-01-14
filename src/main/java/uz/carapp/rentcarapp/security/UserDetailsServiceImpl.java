@@ -137,6 +137,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userRegDTO.setFirstName(user.getFirstName());
             userRegDTO.setBirthDate(user.getBirthdate());
             userRegDTO.setEmail(user.getEmail());
+            userRegDTO.setGender(user.isGender());
+            userRegDTO.setStatus(user.isStatus());
+            userRegDTO.setPhone(user.getPhoneNumber());
             userRegDTO.setRoles(user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
             return userRegDTO;
         }).stream().toList();
