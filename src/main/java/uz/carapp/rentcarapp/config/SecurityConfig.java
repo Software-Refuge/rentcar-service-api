@@ -55,6 +55,8 @@ public class SecurityConfig {
                             //#--------------Account-------------------------#
                             .requestMatchers("/api/account/create-user").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/account/list").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------Attachment----------------------#
+                            .requestMatchers("/api/attachments/save-file").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

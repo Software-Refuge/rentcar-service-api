@@ -35,7 +35,7 @@ public class AttachmentResource {
      * @return
      */
     @Operation(summary = "Save attachments ")
-    @PostMapping(value = "/admin/attachments/save-file", consumes ={MediaType.MULTIPART_FORM_DATA_VALUE},
+    @PostMapping(value = "/attachments/save-file", consumes ={MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
