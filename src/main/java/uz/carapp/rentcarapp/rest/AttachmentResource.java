@@ -29,7 +29,7 @@ public class AttachmentResource {
     private final Logger log = LoggerFactory.getLogger(AttachmentResource.class);
 
     /**
-     * to save scanner passport, photo and certificate for application
+     * to save file
      * @param multipartFile
      * @param attTypeEnum
      * @return

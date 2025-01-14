@@ -1,6 +1,7 @@
 package uz.carapp.rentcarapp.service.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 

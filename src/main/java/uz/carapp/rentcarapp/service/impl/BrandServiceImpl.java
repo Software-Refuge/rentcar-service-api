@@ -2,16 +2,19 @@ package uz.carapp.rentcarapp.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Brand;
 import uz.carapp.rentcarapp.repository.BrandRepository;
 import uz.carapp.rentcarapp.service.BrandService;
+import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
 import uz.carapp.rentcarapp.service.dto.BrandEditDTO;
 import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.BrandMapper;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,9 @@ public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
 
     private final BrandMapper brandMapper;
+
+    @Value("${minio.external}")
+    private String BASE_URL;
 
 
     public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper) {
@@ -72,19 +78,35 @@ public class BrandServiceImpl implements BrandService {
     @Transactional(readOnly = true)
     public List<BrandDTO> findAll() {
         LOG.debug("Request to get all Brands");
-        return brandRepository.findAll().stream().map(brandMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return brandRepository.findAll().stream().map(brandMapper::toDto)
+                .map(brandDTO -> {
+                    AttachmentDTO attachment = brandDTO.getAttachment();
+                    if(attachment!=null) {
+                        attachment.setPath(BASE_URL+ File.separator +attachment.getPath());
+                        brandDTO.setAttachment(attachment);
+                    }
+                    return brandDTO;
+                }).collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<BrandDTO> findOne(Long id) {
-        LOG.debug("Request to get Brand : {}", id);
-        return brandRepository.findById(id).map(brandMapper::toDto);
+        LOG.info("Request to get Brand : {}", id);
+        return brandRepository.findById(id).map(brandMapper::toDto)
+                .map(brandDTO -> {
+                    if(brandDTO.getAttachment()!=null) {
+                        AttachmentDTO attachment = brandDTO.getAttachment();
+                        attachment.setPath(BASE_URL+ File.separator +attachment.getPath());
+                        brandDTO.setAttachment(attachment);
+                    }
+                    return brandDTO;
+                });
     }
 
     @Override
     public void delete(Long id) {
-        LOG.debug("Request to delete Brand : {}", id);
+        LOG.info("Request to delete Brand : {}", id);
         brandRepository.deleteById(id);
     }
 

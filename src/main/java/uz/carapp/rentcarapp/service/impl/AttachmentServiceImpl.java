@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 @Service
 public class AttachmentServiceImpl implements AttachmentService {
@@ -76,6 +77,21 @@ public class AttachmentServiceImpl implements AttachmentService {
         attachment.setExt(getFileExtension(orgFileName));
         attachment.setFileSize(file.getSize());
         return attachment;
+    }
+
+    public AttachmentDTO findById(Integer attachmentId) {
+        Optional<Attachment> optionalAttachment = attachmentRepository.findById(attachmentId);
+        if(optionalAttachment.isPresent()) {
+            AttachmentDTO attachmentDTO = attachmentMapper.toDto(optionalAttachment.get());
+            String path = getFilePath() + attachmentDTO.getFileName();
+            attachmentDTO.setPath(path);
+            return attachmentDTO;
+        }
+        return null;
+    }
+
+    private String getFilePath() {
+        return BASE_URL + File.separator + BUCKET_NAME + File.separator;
     }
 
     private String getPath() {

@@ -19,6 +19,11 @@ public interface BrandMapper extends EntityMapper<BrandDTO, Brand> {
     @Named("attachmentId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "fileName", source = "fileName")
+    @Mapping(target = "fileSize", source = "fileSize")
+    @Mapping(target = "originalFileName", source = "originalFileName")
+    @Mapping(target = "path", source = "path")
+    @Mapping(target = "ext", source = "ext")
     AttachmentDTO toDtoAttachmentId(Attachment attachment);
 
     @Mapping(target = "attachment.id",source = "attachmentId")
