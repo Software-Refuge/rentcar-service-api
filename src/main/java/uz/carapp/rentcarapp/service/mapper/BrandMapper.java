@@ -21,6 +21,7 @@ public interface BrandMapper extends EntityMapper<BrandDTO, Brand> {
     @Mapping(target = "id", source = "id")
     AttachmentDTO toDtoAttachmentId(Attachment attachment);
 
+    @Mapping(target = "attachment.id",source = "attachmentId")
     Brand toEntity(BrandSaveDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

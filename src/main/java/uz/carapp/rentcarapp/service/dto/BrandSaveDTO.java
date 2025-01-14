@@ -20,4 +20,6 @@ public class BrandSaveDTO implements Serializable {
     private String name;
 
     private Boolean status;
+
+    private Long attachmentId;
 }
