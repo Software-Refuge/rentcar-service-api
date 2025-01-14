@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uz.carapp.rentcarapp.utils.FileUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
