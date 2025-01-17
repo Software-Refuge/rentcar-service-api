@@ -66,3 +66,7 @@ minio:
   secretKey: minpassadmin #0uFmYHBX7Ljik754gmlb8YU7D7lUabA9 #TpowV7kXsbeGCCM8iMASkw7qDtyNnfWm  #Dl4ust9GMQvztfeW3IH1NDm1lqynP1ET
   secure: false
   bucketDefaultName: rentcar
+
+logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId}, spanId=%X{spanId}]"
