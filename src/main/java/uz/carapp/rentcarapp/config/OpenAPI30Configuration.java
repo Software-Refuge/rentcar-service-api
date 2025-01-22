@@ -30,7 +30,13 @@ public class OpenAPI30Configuration {
                 "/api/v1/brands/**",
                 "/api/account/create-user",
                 "/api/account/list",
-                "/api/attachments/save-file"
+                "/api/attachments/save-file",
+                "/api/v1/car-bodies/**",
+                "/api/v1/car-classes/**",
+                "/api/v1/categories/**",
+                "/api/v1/parametrs/**",
+                "/api/v1/vehicles/**"
+
         };
         return GroupedOpenApi.builder().group("RentCarAPP Application").pathsToMatch(path).build();
     }
