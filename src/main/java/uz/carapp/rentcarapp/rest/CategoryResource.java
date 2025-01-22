@@ -78,7 +78,6 @@ public class CategoryResource {
     /**
      * {@code PATCH  /categories/:id} : Partial updates given fields of an existing category, field will ignore if it is null
      *
-     * @param id the id of the categoryDTO to save.
      * @param categoryDTO the categoryDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated categoryDTO,
      * or with status {@code 400 (Bad Request)} if the categoryDTO is not valid,
@@ -86,20 +85,19 @@ public class CategoryResource {
      * or with status {@code 500 (Internal Server Error)} if the categoryDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Update category")
     public ResponseEntity<CategoryDTO> partialUpdateCategory(
-        @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CategoryDTO categoryDTO
     ) throws URISyntaxException {
-        LOG.info("REST request to partial update Category partially : {}, {}", id, categoryDTO);
+        LOG.info("REST request to partial update Category partially : {}", categoryDTO);
         if (categoryDTO.getId() == null) {
             throw new BadRequestCustomException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        if (!categoryRepository.existsById(id)) {
+        if (!categoryRepository.existsById(categoryDTO.getId())) {
             throw new BadRequestCustomException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 

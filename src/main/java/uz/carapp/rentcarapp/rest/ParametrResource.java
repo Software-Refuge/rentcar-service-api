@@ -80,7 +80,6 @@ public class ParametrResource {
     /**
      * {@code PATCH  /parametrs/:id} : Partial updates given fields of an existing parametr, field will ignore if it is null
      *
-     * @param id the id of the parametrDTO to save.
      * @param parametrDTO the parametrDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated parametrDTO,
      * or with status {@code 400 (Bad Request)} if the parametrDTO is not valid,
@@ -88,20 +87,19 @@ public class ParametrResource {
      * or with status {@code 500 (Internal Server Error)} if the parametrDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Update parameter")
     public ResponseEntity<ParametrDTO> partialUpdateParametr(
-        @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ParametrDTO parametrDTO
     ) throws URISyntaxException {
-        LOG.info("REST request to partial update Parametr partially : {}, {}", id, parametrDTO);
+        LOG.info("REST request to partial update Parametr partially :  {}", parametrDTO);
         if (parametrDTO.getId() == null) {
             throw new BadRequestCustomException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        if (!parametrRepository.existsById(id)) {
+        if (!parametrRepository.existsById(parametrDTO.getId())) {
             throw new BadRequestCustomException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 

@@ -79,7 +79,6 @@ public class CarBodyResource {
     /**
      * {@code PATCH  /car-bodies/:id} : Partial updates given fields of an existing carBody, field will ignore if it is null
      *
-     * @param id the id of the carBodyDTO to save.
      * @param carBodyDTO the carBodyDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated carBodyDTO,
      * or with status {@code 400 (Bad Request)} if the carBodyDTO is not valid,
@@ -87,20 +86,19 @@ public class CarBodyResource {
      * or with status {@code 500 (Internal Server Error)} if the carBodyDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Update car body")
     public ResponseEntity<CarBodyDTO> partialUpdateCarBody(
-        @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CarBodyDTO carBodyDTO
     ) throws URISyntaxException {
-        LOG.info("REST request to partial update CarBody partially : {}, {}", id, carBodyDTO);
+        LOG.info("REST request to partial update CarBody partially : {}", carBodyDTO);
         if (carBodyDTO.getId() == null) {
             throw new BadRequestCustomException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        if (!carBodyRepository.existsById(id)) {
+        if (!carBodyRepository.existsById(carBodyDTO.getId())) {
             throw new BadRequestCustomException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
