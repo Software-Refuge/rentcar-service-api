@@ -1,10 +1,9 @@
 global:
-  scrape_interval: 15s # How often to scrape targets by default.
+  scrape_interval: 5s # How often to scrape targets by default.
 
 scrape_configs:
   - job_name: 'spring-boot-app'
     static_configs:
-      - targets: ['rentcarapp-client-backend-1:8181'] # Replace with your Spring Boot container name and port.
+      - targets: ['client-backend:8181'] # Replace with your Spring Boot container name and port.
      # - targets: ['localhost:8181'] # Replace with your Spring Boot container name and port.
-    authorization:
-      credentials: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9BRE1JTiIsImV4cCI6MTczODk3MjgwMH0.KPuRvb3Q84cEUa_LpG8lQUF_ttr7SKDQBpl0vXDNzuBOSiEWFphE05UXCxjKL25pA08udsrdD_MtYzBxcqEDdw'
+    metrics_path: '/actuator/prometheus'
