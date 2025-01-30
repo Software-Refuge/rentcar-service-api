@@ -44,6 +44,15 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:1@service-db:5432/rentcardb?sslmode=disable
+    ports:
+      - "9187:9187"
+    depends_on:
+      - service-db
+
   minio:
     image: docker.io/bitnami/minio:2022
     ports:

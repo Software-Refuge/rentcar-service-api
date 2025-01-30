@@ -7,3 +7,7 @@ scrape_configs:
       - targets: ['client-backend:8181'] # Replace with your Spring Boot container name and port.
      # - targets: ['localhost:8181'] # Replace with your Spring Boot container name and port.
     metrics_path: '/actuator/prometheus'
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: [ 'postgres-exporter:9187' ]
