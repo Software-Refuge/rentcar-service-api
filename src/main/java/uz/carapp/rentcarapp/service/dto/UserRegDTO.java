@@ -9,6 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserRegDTO {
+    private Long id;
     private String firstName;
     private String lastName;
     private String middleName;

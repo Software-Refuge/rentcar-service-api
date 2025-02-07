@@ -134,6 +134,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("Request to get all users list");
         List<UserRegDTO> list = userRepository.findAll(pageable).map(user -> {
             UserRegDTO userRegDTO = new UserRegDTO();
+            userRegDTO.setId(user.getId());
             userRegDTO.setLastName(user.getLastName());
             userRegDTO.setFirstName(user.getFirstName());
             userRegDTO.setBirthDate(user.getBirthdate());
