@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Table(name = "merchant")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Merchant implements Serializable {
+public class Merchant extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

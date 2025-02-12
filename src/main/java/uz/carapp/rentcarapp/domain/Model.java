@@ -18,7 +18,7 @@ import java.io.Serializable;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
-public class Model implements Serializable {
+public class Model extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

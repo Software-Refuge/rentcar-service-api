@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Color implements Serializable {
+public class Color extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

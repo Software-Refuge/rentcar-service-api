@@ -6,12 +6,14 @@ import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "merchant_branch")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class MerchantBranch {
+public class MerchantBranch extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
