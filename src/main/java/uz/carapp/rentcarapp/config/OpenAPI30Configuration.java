@@ -31,11 +31,11 @@ public class OpenAPI30Configuration {
                 "/api/account/create-user",
                 "/api/account/list",
                 "/api/attachments/save-file",
-                "/api/v1/car-bodies1/**",
-                "/api/v1/car-classes1/**",
-                "/api/v1/categories1/**",
-                "/api/v1/parametrs1/**",
-                "/api/v1/vehicles1/**"
+                "/api/v1/models/**",
+                "/api/v1/colors/**",
+                "/api/v1/params/**",
+                "/api/v1/param-values/**",
+                "/api/v1/translations/**"
 
         };
         return GroupedOpenApi.builder()

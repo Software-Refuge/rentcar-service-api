@@ -69,6 +69,16 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/parametrs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Vehicle-------------------------#
                             .requestMatchers("/api/v1/vehicles/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------Color---------------------------#
+                            .requestMatchers("/api/v1/colors/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------Model---------------------------#
+                            .requestMatchers("/api/v1/models/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------Param---------------------------#
+                            .requestMatchers("/api/v1/params/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------ParamValue----------------------#
+                            .requestMatchers("/api/v1/params/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            //#--------------Translations--------------------#
+                            .requestMatchers("/api/v1/translations/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

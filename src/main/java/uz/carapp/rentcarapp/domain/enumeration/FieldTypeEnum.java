@@ -10,5 +10,6 @@ public enum FieldTypeEnum {
     YEAR_FIELD,
     DATE_FIELD,
     DATETIME_FIELD,
+    BOOLEAN_FIELD,
     SELECT_FIELD,
 }
