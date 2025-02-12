@@ -8,14 +8,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import uz.carapp.rentcarapp.domain.Merchant;
+import uz.carapp.rentcarapp.domain.MerchantRole;
+import uz.carapp.rentcarapp.domain.enumeration.MerchantRoleEnum;
 import uz.carapp.rentcarapp.repository.MerchantRepository;
+import uz.carapp.rentcarapp.repository.MerchantRoleRepository;
 import uz.carapp.rentcarapp.repository.UserRepository;
 import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
+import uz.carapp.rentcarapp.security.UserDetailsServiceImpl;
 import uz.carapp.rentcarapp.service.MerchantService;
-import uz.carapp.rentcarapp.service.dto.MerchantDTO;
-import uz.carapp.rentcarapp.service.dto.MerchantEditDTO;
-import uz.carapp.rentcarapp.service.dto.MerchantSaveDTO;
+import uz.carapp.rentcarapp.service.dto.*;
 import uz.carapp.rentcarapp.service.mapper.MerchantMapper;
+import uz.carapp.rentcarapp.service.mapper.MerchantRoleMapper;
+import uz.carapp.rentcarapp.service.mapper.MerchantRoleMapperImpl;
 
 import java.util.Optional;
 
@@ -32,14 +36,20 @@ public class MerchantServiceImpl implements MerchantService {
 
     private final MerchantMapper merchantMapper;
     private final UserRepository userRepository;
+    private final MerchantRoleRepository merchantRoleRepository;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final MerchantRoleMapper merchantRoleMapper;
 
     public MerchantServiceImpl(
-        MerchantRepository merchantRepository,
-        MerchantMapper merchantMapper,
-        UserRepository userRepository) {
+            MerchantRepository merchantRepository,
+            MerchantMapper merchantMapper,
+            UserRepository userRepository, MerchantRoleRepository merchantRoleRepository, UserDetailsServiceImpl userDetailsService, MerchantRoleMapper merchantRoleMapper) {
         this.merchantRepository = merchantRepository;
         this.merchantMapper = merchantMapper;
         this.userRepository = userRepository;
+        this.merchantRoleRepository = merchantRoleRepository;
+        this.userDetailsService = userDetailsService;
+        this.merchantRoleMapper = merchantRoleMapper;
     }
 
     @Override
@@ -58,6 +68,14 @@ public class MerchantServiceImpl implements MerchantService {
 
         Merchant merchant = merchantMapper.toEntity(merchantSaveDTO);
         merchant = merchantRepository.save(merchant);
+
+        //assign OWNER ROLE to user
+        MerchantRoleDTO merchantRoleDTO = new MerchantRoleDTO();
+        merchantRoleDTO.setMerchant(merchantMapper.toDto(merchant));
+        merchantRoleDTO.setUser(new UserDTO(merchantSaveDTO.getUserId()));
+        merchantRoleDTO.setMerchantRoleType(MerchantRoleEnum.OWNER);
+        merchantRoleRepository.save(merchantRoleMapper.toEntity(merchantRoleDTO));
+
         return merchantMapper.toDto(merchant);
     }
 

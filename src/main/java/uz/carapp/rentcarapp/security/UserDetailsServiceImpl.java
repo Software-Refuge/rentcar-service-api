@@ -107,7 +107,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return true;
     }
 
-    public void createUser(@Valid UserRegDTO userRegDTO) {
+    public Long createUser(@Valid UserRegDTO userRegDTO) {
 
         User user = new User();
 
@@ -127,7 +127,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authorities = new HashSet<>(Collections.singletonList(authorityRepository.findByName(AuthoritiesConstants.USER)));
         user.setAuthorities(authorities);
 
-        userRepository.save(user);
+        User save = userRepository.save(user);
+        return save.getId();
     }
 
     public Page<UserRegDTO> findAll(Pageable pageable) {

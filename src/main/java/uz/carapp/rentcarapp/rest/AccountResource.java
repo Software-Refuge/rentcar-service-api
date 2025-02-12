@@ -112,13 +112,13 @@ public class AccountResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Create user")
-    public ResponseEntity<Void> createUser(@Valid @RequestBody UserRegDTO userRegDTO) {
+    public ResponseEntity<Long> createUser(@Valid @RequestBody UserRegDTO userRegDTO) {
         log.info("REST request to create user: {}", userRegDTO);
         if(userRepository.findOneByEmailIgnoreCase(userRegDTO.getEmail().toLowerCase()).isPresent()) {
             throw new BadRequestCustomException("Email address already in use","","");
         }
-        userService.createUser(userRegDTO);
-        return ResponseEntity.ok().build();
+        Long userId = userService.createUser(userRegDTO);
+        return ResponseEntity.ok().body(userId);
     }
 
     @GetMapping("/account/list")
