@@ -38,6 +38,18 @@ public class OpenAPI30Configuration {
                 "/api/v1/vehicles1/**"
 
         };
-        return GroupedOpenApi.builder().group("RentCarAPP Application").pathsToMatch(path).build();
+        return GroupedOpenApi.builder()
+                .group("RentCarAPP Application").pathsToMatch(path).build();
+    }
+
+    @Bean
+    public  GroupedOpenApi merchantOpenApi() {
+        String[] merchantPath = {
+                "/api/merchant/auth",
+                "/api/merchant/select-branch"
+        };
+
+        return GroupedOpenApi.builder()
+                .group("Merchant API").pathsToMatch(merchantPath).build();
     }
 }
