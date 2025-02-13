@@ -158,4 +158,12 @@ public class MerchantResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }*/
+
+    @GetMapping(value = "/merchant/test")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.OWNER + "\")")
+    @Operation(summary = "Get merchant by id")
+    public String test() {
+        return "test owner";
+    }
 }

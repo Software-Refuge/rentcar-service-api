@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import uz.carapp.rentcarapp.domain.enumeration.MerchantRoleEnum;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
+@ToString
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class MerchantRole extends AbstractAuditingEntity<Long> implements Serializable {
 

@@ -52,6 +52,7 @@ public class SecurityConfig {
                             //#--------------Merchant------------------------#
                             .requestMatchers("/api/v1/merchants/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/v1/merchant-branches/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/merchants/merchant/test").hasRole(AuthoritiesConstants.OWNER)
                             //#--------------Brand---------------------------#
                             .requestMatchers("/api/v1/brands").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Account-------------------------#
@@ -59,16 +60,6 @@ public class SecurityConfig {
                             .requestMatchers("/api/account/list").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Attachment----------------------#
                             .requestMatchers("/api/attachments/save-file").hasAuthority(AuthoritiesConstants.ADMIN)
-                            //#--------------CarBody-------------------------#
-                            .requestMatchers("/api/v1/car-bodies/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            //#--------------CarClass------------------------#
-                            .requestMatchers("/api/v1/car-classes/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            //#--------------Category------------------------#
-                            .requestMatchers("/api/v1/categories/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            //#--------------Parameter-----------------------#
-                            .requestMatchers("/api/v1/parametrs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            //#--------------Vehicle-------------------------#
-                            .requestMatchers("/api/v1/vehicles/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Color---------------------------#
                             .requestMatchers("/api/v1/colors/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Model---------------------------#

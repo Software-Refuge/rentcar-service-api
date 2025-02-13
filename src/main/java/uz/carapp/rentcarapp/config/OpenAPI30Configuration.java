@@ -35,7 +35,8 @@ public class OpenAPI30Configuration {
                 "/api/v1/colors/**",
                 "/api/v1/params/**",
                 "/api/v1/param-values/**",
-                "/api/v1/translations/**"
+                "/api/v1/translations/**",
+                "/api/v1/merchants/merchant/test/**"
 
         };
         return GroupedOpenApi.builder()
