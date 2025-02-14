@@ -68,6 +68,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private boolean status;
 
+    @Enumerated(EnumType.STRING)
     private GenderEnum gender;
 
     private Instant birthdate;
