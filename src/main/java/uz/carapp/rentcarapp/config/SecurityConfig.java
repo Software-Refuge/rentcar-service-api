@@ -47,12 +47,13 @@ public class SecurityConfig {
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/actuator/prometheus").permitAll()
                             .requestMatchers("/api/merchant/auth").permitAll()
+                            .requestMatchers("/api/merchant/me").authenticated()
                             .requestMatchers("/api/merchant/select-branch").permitAll()
                             .requestMatchers("/metrics").permitAll()
                             //#--------------Merchant------------------------#
                             .requestMatchers("/api/v1/merchants/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/v1/merchant-branches/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/v1/merchants/merchant/test").hasRole(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/merchants1/merchant/test").hasAuthority(AuthoritiesConstants.OWNER)
                             //#--------------Brand---------------------------#
                             .requestMatchers("/api/v1/brands").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Account-------------------------#

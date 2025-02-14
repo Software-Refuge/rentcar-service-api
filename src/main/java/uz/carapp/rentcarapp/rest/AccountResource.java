@@ -84,7 +84,7 @@ public class AccountResource {
             description = "This method return current user with authorities",
             security = @SecurityRequirement(name = "bearerAuth"))
     public UserAccountDTO getAccount() {
-        log.info("REQUEST to get current user dates!");
+        log.info("REQUEST to get current user data");
         return userService.getUserWithAuthorities().map(UserAccountDTO::new)
                 .orElseThrow(() -> new BadRequestCustomException("User could not be found","",""));
     }
@@ -153,7 +153,7 @@ public class AccountResource {
         }
 
         // OWNER bo'lsa, barcha branchlarga avtomatik kirish huquqi bo'ladi
-        boolean isOwner = roles.stream().anyMatch(role->role.getMerchantRoleType().equals(MerchantRoleEnum.OWNER));
+        boolean isOwner = roles.stream().anyMatch(role->role.getMerchantRoleType().equals(MerchantRoleEnum.ROLE_OWNER));
 
         // 4. Merchant va Branch larni guruhlash
         Map<Long, List<MerchantRoleEnum>> merchantBranches = new HashMap<>();
@@ -161,7 +161,7 @@ public class AccountResource {
         if(isOwner) {
             //Agar OWNER bo'lsa, barcha filiallarni olish
             List<Long> branchIds = merchantBranchRepository.getBranchIdsByUserId(user.getId());
-            branchIds.forEach(branchId -> merchantBranches.put(branchId, List.of(MerchantRoleEnum.OWNER)));
+            branchIds.forEach(branchId -> merchantBranches.put(branchId, List.of(MerchantRoleEnum.ROLE_OWNER)));
         } else {
             for (MerchantRole role : roles) {
                 merchantBranches
@@ -199,7 +199,7 @@ public class AccountResource {
         List<MerchantRole> merchantRoles = merchantRoleRepository.findByUserIdAndMerchantIdAndBranchId(user.getId(),
                 request.getMerchantId(), request.getMerchantBranchId());
         if(merchantRoles.isEmpty())
-                merchantRoles = merchantRoleRepository.findByUserIdAndMerchantIdAndRoleType(user.getId(), request.getMerchantId(), MerchantRoleEnum.OWNER);
+                merchantRoles = merchantRoleRepository.findByUserIdAndMerchantIdAndRoleType(user.getId(), request.getMerchantId(), MerchantRoleEnum.ROLE_OWNER);
 
         if(merchantRoles.isEmpty()) {
             throw new BadRequestCustomException("No merchant Access","","");
@@ -208,6 +208,22 @@ public class AccountResource {
         String finalToken = jwtUtil.generateToken(user, request.getMerchantId(), request.getMerchantBranchId(), merchantRoles);
 
         return ResponseEntity.ok(new JWTToken(finalToken));
+    }
+
+    /**
+     * {@code GET  /me} : get the current user.
+     *
+     * @return the current user.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GetMapping("/merchant/me")
+    @Operation(summary = "Get the current user for merchant users",
+            description = "This method return current user with authorities",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    public UserAccountDTO getAccountMerchant() {
+        log.info("REQUEST to get current user data with merchant roles");
+        return userService.getUserWithAuthoritiesMerchantRoles().map(UserAccountDTO::new)
+                .orElseThrow(() -> new BadRequestCustomException("User could not be found","",""));
     }
 
 

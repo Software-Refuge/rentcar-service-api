@@ -35,7 +35,8 @@ public class JwtUtil {
                 .claim("userId", user.getId())
                 .claim("merchantId", merchantId)
                 .claim("branchId", branchId)
-                .claim(AUTHORITIES_KEY, roles.stream().map(MerchantRole::getMerchantRoleType).collect(Collectors.toSet()))
+                .claim(AUTHORITIES_KEY, roles.stream().map(merchantRole -> merchantRole.getMerchantRoleType().toString())
+                        .collect(Collectors.joining(",")))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86_400_000)) // 24 soat
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.carapp.rentcarapp.domain.Authority;
 import uz.carapp.rentcarapp.domain.User;
+import uz.carapp.rentcarapp.domain.enumeration.GenderEnum;
 import uz.carapp.rentcarapp.repository.AuthorityRepository;
 import uz.carapp.rentcarapp.repository.UserRepository;
 import uz.carapp.rentcarapp.security.AuthoritiesConstants;
@@ -48,7 +49,7 @@ public class InitialDataLoader implements CommandLineRunner {
             adminUser.setPhoneNumber("+998991234567");
             adminUser.setStatus(true);
             adminUser.setActivated(true);
-            adminUser.setGender(true);
+            adminUser.setGender(GenderEnum.MALE);
             adminUser.setAuthorities(adminAuthorities);
             adminUser.setCreatedBy(Constants.SYSTEM);
             userRepository.save(adminUser);

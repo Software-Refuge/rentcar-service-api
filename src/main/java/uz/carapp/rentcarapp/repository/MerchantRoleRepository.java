@@ -27,4 +27,7 @@ public interface MerchantRoleRepository extends JpaRepository<MerchantRole, Long
 
     @Query(value = "select m from MerchantRole m where m.user.id=:id and m.merchant.id=:merchantId and m.merchantRoleType=:merchantRoleEnum")
     List<MerchantRole> findByUserIdAndMerchantIdAndRoleType(Long id, Long merchantId, MerchantRoleEnum merchantRoleEnum);
+
+    @Query(value = "select mr from MerchantRole mr where mr.user.id=:id and (mr.merchantBranch.id=:branchId or mr.merchantRoleType='ROLE_OWNER')")
+    List<MerchantRole> findByUserIdAndBranchId(Long id, Long branchId);
 }

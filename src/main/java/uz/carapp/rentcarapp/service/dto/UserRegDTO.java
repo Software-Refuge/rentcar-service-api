@@ -2,6 +2,7 @@ package uz.carapp.rentcarapp.service.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import uz.carapp.rentcarapp.domain.enumeration.GenderEnum;
 
 import java.time.Instant;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class UserRegDTO {
     private String middleName;
     private String phone;
     private String email;
-    private boolean gender;
+    private GenderEnum gender;
     private Instant birthDate;
     private boolean status;
     private String password;

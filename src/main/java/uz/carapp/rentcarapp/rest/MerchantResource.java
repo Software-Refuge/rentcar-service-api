@@ -161,8 +161,7 @@ public class MerchantResource {
 
     @GetMapping(value = "/merchant/test")
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.OWNER + "\")")
-    @Operation(summary = "Get merchant by id")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public String test() {
         return "test owner";
     }

@@ -73,7 +73,7 @@ public class MerchantServiceImpl implements MerchantService {
         MerchantRoleDTO merchantRoleDTO = new MerchantRoleDTO();
         merchantRoleDTO.setMerchant(merchantMapper.toDto(merchant));
         merchantRoleDTO.setUser(new UserDTO(merchantSaveDTO.getUserId()));
-        merchantRoleDTO.setMerchantRoleType(MerchantRoleEnum.OWNER);
+        merchantRoleDTO.setMerchantRoleType(MerchantRoleEnum.ROLE_OWNER);
         merchantRoleRepository.save(merchantRoleMapper.toEntity(merchantRoleDTO));
 
         return merchantMapper.toDto(merchant);

@@ -33,6 +33,16 @@ public final class SecurityUtils {
         return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
     }
 
+    public static Optional<CustomUserDetails> getCurrentUserDetails() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+        if (authentication != null ) {//&& authentication.getPrincipal() instanceof CustomUserDetails) {
+            return Optional.of((CustomUserDetails) authentication.getPrincipal());
+        }
+        return Optional.empty();
+    }
+
     private static String extractPrincipal(Authentication authentication) {
         if (authentication == null) {
             return null;

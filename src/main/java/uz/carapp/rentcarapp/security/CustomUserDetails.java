@@ -7,26 +7,26 @@ import java.util.Collection;
 
 public class CustomUserDetails extends User {
 
-    private long userId;
-    private long branchId;
-    private long merchantId;
+    private Long userId;
+    private Long branchId;
+    private Long merchantId;
 
-    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, long branchId, long merchantId, long userId) {
+    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, Long branchId, Long merchantId) {
         super(username, password, authorities);
+        this.userId = userId;
         this.branchId = branchId;
         this.merchantId = merchantId;
-        this.userId = userId;
     }
 
-    public long getBranchId() {
+    public Long getBranchId() {
         return branchId;
     }
 
-    public long getMerchantId() {
+    public Long getMerchantId() {
         return merchantId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import uz.carapp.rentcarapp.security.CustomUserDetails;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -65,7 +66,11 @@ public class JwtProvider {
 
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
 
-//        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        Long userId = claims.get("userId", Long.class);
+        Long merchantId = claims.get("merchantId", Long.class);
+        Long branchId = claims.get("branchId", Long.class);
+
+        System.out.println("branchId: "+branchId);
 
         Collection<? extends GrantedAuthority> authorities = Arrays
                 .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
@@ -73,8 +78,12 @@ public class JwtProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        System.out.println("auth: "+authorities);
+        System.out.println("user: "+claims.getSubject());
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        //User principal = new User(claims.getSubject(), "", authorities);
+        CustomUserDetails userDetails = new CustomUserDetails(claims.getSubject(),"",authorities,branchId,merchantId,userId);
+
+        return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 }

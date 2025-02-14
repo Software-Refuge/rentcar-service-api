@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import uz.carapp.rentcarapp.security.CustomUserDetails;
 import uz.carapp.rentcarapp.security.UserDetailsServiceImpl;
 
 import java.io.IOException;
@@ -38,11 +39,32 @@ public class JWTFilter extends GenericFilterBean {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
+
         if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
             Authentication authentication = jwtProvider.getAuthentication(jwt);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            if (authentication.getPrincipal() instanceof CustomUserDetails) {
+                CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+                // 🛑 `merchantId` va `branchId` bor yoki yo‘qligini tekshiramiz
+                boolean isMerchantToken = customUserDetails.getMerchantId() != null && customUserDetails.getBranchId() != null;
+
+                UserDetails userDetails;
+                if (isMerchantToken) {
+                    // 🔥 Merchant token bo‘lsa, `branchId` bilan yuklaymiz
+                    //branchId va merchantId bo'yicha rollarni olish
+                    userDetails = userDetailsService.loadUserByUsername(customUserDetails.getUsername(), customUserDetails.getUserId(), customUserDetails.getMerchantId(), customUserDetails.getBranchId());
+                } else {
+                    // 🔥 Oddiy token bo‘lsa, faqat login bilan yuklaymiz
+                    userDetails = userDetailsService.loadUserByUsername(customUserDetails.getUsername());
+                }
+                System.out.println("userDetails: "+userDetails.getAuthorities());
+                System.out.println("userNAme: "+userDetails.getUsername());
+
+
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

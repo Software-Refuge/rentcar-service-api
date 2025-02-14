@@ -4,8 +4,8 @@ package uz.carapp.rentcarapp.domain.enumeration;
  * The MerchantRoleEnum enumeration.
  */
 public enum MerchantRoleEnum {
-    OWNER,
-    MERCHANT_ADMIN,
-    MERCHANT_SALES,
-    MERCHANT_CONTENT,
+    ROLE_OWNER,
+    ROLE_MERCHANT_ADMIN,
+    ROLE_MERCHANT_SALES,
+    ROLE_MERCHANT_CONTENT
 }

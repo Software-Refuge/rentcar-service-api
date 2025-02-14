@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import uz.carapp.rentcarapp.config.Constants;
+import uz.carapp.rentcarapp.domain.enumeration.GenderEnum;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -67,7 +68,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private boolean status;
 
-    private boolean gender;
+    private GenderEnum gender;
 
     private Instant birthdate;
 
