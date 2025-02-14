@@ -48,7 +48,9 @@ public class OpenAPI30Configuration {
         String[] merchantPath = {
                 "/api/merchant/auth",
                 "/api/merchant/select-branch",
-                "/api/merchant/me"
+                "/api/merchant/me",
+                "/api/merchant/cars",
+                "/api/merchant/car-params"
         };
 
         return GroupedOpenApi.builder()
