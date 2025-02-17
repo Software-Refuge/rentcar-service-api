@@ -42,7 +42,7 @@ public interface CarService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<CarDTO> findAll(Pageable pageable);
+    Page<CarDTO> findAll(Pageable pageable, String lang);
 
     /**
      * Get the "id" car.

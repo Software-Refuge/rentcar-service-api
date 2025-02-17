@@ -1,11 +1,12 @@
 package uz.carapp.rentcarapp.service.mapper;
 
 import org.mapstruct.*;
-import uz.carapp.rentcarapp.domain.Car;
-import uz.carapp.rentcarapp.domain.Merchant;
-import uz.carapp.rentcarapp.domain.MerchantBranch;
-import uz.carapp.rentcarapp.domain.Model;
+import uz.carapp.rentcarapp.domain.*;
+import uz.carapp.rentcarapp.domain.enumeration.LanguageEnum;
+import uz.carapp.rentcarapp.repository.TranslationRepository;
 import uz.carapp.rentcarapp.service.dto.*;
+
+import java.util.List;
 
 /**
  * Mapper for the entity {@link Car} and its DTO {@link CarDTO}.
@@ -42,4 +43,19 @@ public interface CarMapper extends EntityMapper<CarDTO, Car> {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Car partialUpdate(@MappingTarget Car car, CarEditDTO carEditDTO);
+
+    /**
+     * **Tarjima qo'shish uchun maxsus metod**
+     */
+    default CarDTO toDto(Car car, String lang, TranslationRepository translationRepository) {
+        CarDTO dto = toDto(car);
+
+        // Model nomini tarjima qilish
+        dto.getModel().setName(
+                translationRepository.findTranslationByFieldName("MODEL", car.getModel().getName(), LanguageEnum.valueOf(lang))
+                        .orElse(car.getModel().getName())
+        );
+
+        return dto;
+    }
 }

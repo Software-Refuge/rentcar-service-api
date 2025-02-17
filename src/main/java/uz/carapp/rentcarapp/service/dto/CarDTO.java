@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -27,4 +29,6 @@ public class CarDTO implements Serializable {
     private MerchantDTO merchant;
 
     private MerchantBranchDTO merchantBranch;
+
+    private Map<String, String> params; // Param nomlari va qiymatlari
 }

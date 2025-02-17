@@ -4,6 +4,7 @@ import org.mapstruct.*;
 import uz.carapp.rentcarapp.domain.Car;
 import uz.carapp.rentcarapp.domain.CarParam;
 import uz.carapp.rentcarapp.domain.Param;
+import uz.carapp.rentcarapp.domain.ParamValue;
 import uz.carapp.rentcarapp.service.dto.*;
 
 /**
@@ -25,8 +26,26 @@ public interface CarParamMapper extends EntityMapper<CarParamDTO, CarParam> {
     @Mapping(target = "id", source = "id")
     ParamDTO toDtoParamId(Param param);
 
+    @Named("mapParamValue")
+    default ParamValue mapParamValue(Long paramValueId)  {
+        if(paramValueId == null) {
+            return null;
+        }
+
+        ParamValue paramValue = new ParamValue();
+        paramValue.setId(paramValueId);
+        return paramValue;
+    }
+
+    @Named("paramValueId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id",source = "id")
+    ParamValueDTO toDToParamValueId(ParamValue paramValue);
+
+
     @Mapping(target = "car.id", source = "carId")
     @Mapping(target = "param.id", source = "paramId")
+    @Mapping(target = "paramValue", source = "paramValueId", qualifiedByName = "mapParamValue")
     CarParam toEntity(CarParamSaveDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

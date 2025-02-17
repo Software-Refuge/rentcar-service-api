@@ -30,11 +30,12 @@ public class CarParam extends AbstractAuditingEntity<Long> implements Serializab
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "param_item_value")
-    private String paramItemValue;
 
-    @Column(name = "param_value")
-    private String paramValue;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ParamValue paramValue; //SELECT FIELD UCHUN
+
+    @Column(name = "param_val")
+    private String paramVal; //INT, FLOAT, DATETIME, DATE, kabi value lar uchun field
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "model", "merchant", "merchantBranch" }, allowSetters = true)

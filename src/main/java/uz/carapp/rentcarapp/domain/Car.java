@@ -9,6 +9,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A Car.
@@ -46,4 +47,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "merchant" }, allowSetters = true)
     private MerchantBranch merchantBranch;
+
+    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
+    List<CarParam> carParam;
 }

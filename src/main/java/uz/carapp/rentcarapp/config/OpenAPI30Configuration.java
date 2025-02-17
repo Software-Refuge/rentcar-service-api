@@ -49,8 +49,8 @@ public class OpenAPI30Configuration {
                 "/api/merchant/auth",
                 "/api/merchant/select-branch",
                 "/api/merchant/me",
-                "/api/merchant/cars",
-                "/api/merchant/car-params"
+                "/api/merchant/cars/**",
+                "/api/merchant/car-params/**"
         };
 
         return GroupedOpenApi.builder()

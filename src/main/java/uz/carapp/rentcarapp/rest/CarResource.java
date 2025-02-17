@@ -115,9 +115,10 @@ public class CarResource {
     @GetMapping("")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
-    public ResponseEntity<List<CarDTO>> getAllCars(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<CarDTO>> getAllCars(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                   @RequestHeader(value = "Accept-Language", defaultValue = "uz") String lang) {
         LOG.info("REST request to get a page of Cars");
-        Page<CarDTO> page = carService.findAll(pageable);
+        Page<CarDTO> page = carService.findAll(pageable,lang);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

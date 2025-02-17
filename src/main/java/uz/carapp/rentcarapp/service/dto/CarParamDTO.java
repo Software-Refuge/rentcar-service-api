@@ -18,9 +18,9 @@ public class CarParamDTO implements Serializable {
 
     private Long id;
 
-    private String paramItemValue;
+    private ParamValueDTO paramValue;
 
-    private String paramValue;
+    private String paramVal;
 
     private CarDTO car;
 

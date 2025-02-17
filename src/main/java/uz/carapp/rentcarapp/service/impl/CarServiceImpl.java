@@ -7,14 +7,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Car;
+import uz.carapp.rentcarapp.domain.CarParam;
+import uz.carapp.rentcarapp.domain.Param;
+import uz.carapp.rentcarapp.domain.ParamValue;
+import uz.carapp.rentcarapp.domain.enumeration.LanguageEnum;
+import uz.carapp.rentcarapp.repository.CarParamRepository;
 import uz.carapp.rentcarapp.repository.CarRepository;
+import uz.carapp.rentcarapp.repository.TranslationRepository;
 import uz.carapp.rentcarapp.service.CarService;
 import uz.carapp.rentcarapp.service.dto.CarDTO;
 import uz.carapp.rentcarapp.service.dto.CarEditDTO;
 import uz.carapp.rentcarapp.service.dto.CarSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.CarMapper;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Car}.
@@ -29,10 +39,16 @@ public class CarServiceImpl implements CarService {
 
     private final CarMapper carMapper;
 
+    private final CarParamRepository carParamRepository;
 
-    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper) {
+    private final TranslationRepository translationRepository;
+
+
+    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, CarParamRepository carParamRepository, TranslationRepository translationRepository) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
+        this.carParamRepository = carParamRepository;
+        this.translationRepository = translationRepository;
     }
 
     @Override
@@ -66,11 +82,55 @@ public class CarServiceImpl implements CarService {
             .map(carMapper::toDto);
     }
 
+
+/*    public Page<CarDTO> findAll(Pageable pageable, String lang) {
+        LOG.info("Request to get all Cars by lang:{}",lang);
+        return carRepository.findAll(pageable).map(carMapper::toDto);
+    }*/
+
     @Override
     @Transactional(readOnly = true)
-    public Page<CarDTO> findAll(Pageable pageable) {
-        LOG.info("Request to get all Cars");
-        return carRepository.findAll(pageable).map(carMapper::toDto);
+    public Page<CarDTO> findAll(Pageable pageable, String lang) {
+        Page<Car> cars = carRepository.findAll(pageable);
+        List<Long> carIds = cars.stream().map(Car::getId).collect(Collectors.toList());
+
+        // Barcha CarParam larni olish
+        List<CarParam> carParams = carParamRepository.findByCarIds(carIds);
+
+        // CarParam larni CarDTO ga qo‘shish
+        Map<Long, Map<String, String>> carParamsMap = mapCarParams(carParams, lang);
+
+        return cars.map(car -> {
+            CarDTO dto = carMapper.toDto(car, lang, translationRepository);
+            dto.setParams(carParamsMap.getOrDefault(car.getId(), new HashMap<>()));
+            return dto;
+        });
+    }
+
+    private Map<Long, Map<String, String>> mapCarParams(List<CarParam> carParams, String lang) {
+        Map<Long, Map<String, String>> result = new HashMap<>();
+
+        for (CarParam carParam : carParams) {
+            Long carId = carParam.getCar().getId();
+            String paramName = getTranslatedParam(carParam.getParam(), lang);
+            String paramValue = getTranslatedParamValue(carParam.getParamValue(), carParam.getParamVal(), lang);
+
+            result.computeIfAbsent(carId, k -> new HashMap<>()).put(paramName, paramValue);
+        }
+        return result;
+    }
+
+    private String getTranslatedParam(Param param, String lang) {
+        return translationRepository.findTranslation("PARAM", param.getId(), LanguageEnum.valueOf(lang))
+                .orElseGet(() -> param.getName());
+    }
+
+    private String getTranslatedParamValue(ParamValue paramValue, String paramVal, String lang) {
+        if (paramValue != null) {
+            return translationRepository.findTranslation("PARAM_VALUE", paramValue.getId(), LanguageEnum.valueOf(lang))
+                    .orElseGet(() -> paramValue.getName());
+        }
+        return paramVal;
     }
 
     @Override
