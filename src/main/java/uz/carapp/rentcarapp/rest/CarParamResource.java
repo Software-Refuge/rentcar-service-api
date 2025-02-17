@@ -1,5 +1,6 @@
 package uz.carapp.rentcarapp.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,7 @@ public class CarParamResource {
     @PostMapping("")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
+    @Operation(summary = "Assigning  params to car")
     public ResponseEntity<CarParamDTO> createCarParam(@RequestBody CarParamSaveDTO carParamSaveDTO) throws URISyntaxException {
         LOG.info("REST request to save CarParam : {}", carParamSaveDTO);
         CarParamDTO carParamDTO = carParamService.save(carParamSaveDTO);
@@ -82,7 +84,7 @@ public class CarParamResource {
      * or with status {@code 500 (Internal Server Error)} if the carParamDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
+    /*@PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public ResponseEntity<CarParamDTO> partialUpdateCarParam(
@@ -103,7 +105,7 @@ public class CarParamResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, carParamEditDTO.getId().toString())
         );
-    }
+    }*/
 
     /**
      * {@code GET  /car-params} : get all the carParams.
@@ -111,7 +113,7 @@ public class CarParamResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of carParams in body.
      */
-    @GetMapping("")
+    /*@GetMapping("")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public ResponseEntity<List<CarParamDTO>> getAllCarParams(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
@@ -119,7 +121,7 @@ public class CarParamResource {
         Page<CarParamDTO> page = carParamService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
+    }*/
 
     /**
      * {@code GET  /car-params/:id} : get the "id" carParam.
@@ -127,14 +129,14 @@ public class CarParamResource {
      * @param id the id of the carParamDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the carParamDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public ResponseEntity<CarParamDTO> getCarParam(@PathVariable("id") Long id) {
         LOG.info("REST request to get CarParam : {}", id);
         Optional<CarParamDTO> carParamDTO = carParamService.findOne(id);
         return ResponseUtil.wrapOrNotFound(carParamDTO);
-    }
+    }*/
 
     /**
      * {@code DELETE  /car-params/:id} : delete the "id" carParam.
@@ -142,7 +144,7 @@ public class CarParamResource {
      * @param id the id of the carParamDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public ResponseEntity<Void> deleteCarParam(@PathVariable("id") Long id) {
@@ -151,5 +153,5 @@ public class CarParamResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
+    }*/
 }

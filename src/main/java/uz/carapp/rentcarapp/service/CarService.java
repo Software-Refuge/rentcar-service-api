@@ -50,7 +50,7 @@ public interface CarService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<CarDTO> findOne(Long id);
+    Optional<CarDTO> findOne(Long id, String lang);
 
     /**
      * Delete the "id" car.

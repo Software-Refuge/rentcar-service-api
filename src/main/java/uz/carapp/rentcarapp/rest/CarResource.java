@@ -84,7 +84,7 @@ public class CarResource {
      * or with status {@code 500 (Internal Server Error)} if the carDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
+/*    @PatchMapping(consumes = { "application/json", "application/merge-patch+json" })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public ResponseEntity<CarDTO> partialUpdateCar(@RequestBody CarEditDTO carEditDTO)
@@ -104,7 +104,7 @@ public class CarResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, carEditDTO.getId().toString())
         );
-    }
+    }*/
 
     /**
      * {@code GET  /cars} : get all the cars.
@@ -115,8 +115,9 @@ public class CarResource {
     @GetMapping("")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
+    @Operation(summary = "Get car list")
     public ResponseEntity<List<CarDTO>> getAllCars(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
-                                                   @RequestHeader(value = "Accept-Language", defaultValue = "uz") String lang) {
+                                                   @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String lang) {
         LOG.info("REST request to get a page of Cars");
         Page<CarDTO> page = carService.findAll(pageable,lang);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -132,9 +133,11 @@ public class CarResource {
     @GetMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
-    public ResponseEntity<CarDTO> getCar(@PathVariable("id") Long id) {
+    @Operation(summary = "get car by id")
+    public ResponseEntity<CarDTO> getCar(@PathVariable("id") Long id,
+                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String lang) {
         LOG.info("REST request to get Car : {}", id);
-        Optional<CarDTO> carDTO = carService.findOne(id);
+        Optional<CarDTO> carDTO = carService.findOne(id,lang);
         return ResponseUtil.wrapOrNotFound(carDTO);
     }
 
@@ -144,7 +147,7 @@ public class CarResource {
      * @param id the id of the carDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/{id}")
+/*    @DeleteMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")
     public ResponseEntity<Void> deleteCar(@PathVariable("id") Long id) {
@@ -153,5 +156,5 @@ public class CarResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
+    }*/
 }

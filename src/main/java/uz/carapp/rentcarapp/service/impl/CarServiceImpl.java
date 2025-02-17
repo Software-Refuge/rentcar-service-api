@@ -20,10 +20,7 @@ import uz.carapp.rentcarapp.service.dto.CarEditDTO;
 import uz.carapp.rentcarapp.service.dto.CarSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.CarMapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -135,9 +132,21 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CarDTO> findOne(Long id) {
+    public Optional<CarDTO> findOne(Long id, String lang) {
         LOG.info("Request to get Car : {}", id);
-        return carRepository.findById(id).map(carMapper::toDto);
+        List<CarParam> carParams = carParamRepository.findByCarIds(Collections.singletonList(id));
+
+        Map<Long, Map<String, String>> carParamsMap = mapCarParams(carParams, lang);
+
+        Optional<Car> car = carRepository.findById(id);
+
+        if(car.isPresent()) {
+            CarDTO dto = carMapper.toDto(car.get(), lang, translationRepository);
+            dto.setParams(carParamsMap.getOrDefault(car.get().getId(), new HashMap<>()));
+            return Optional.of(dto);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
