@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import uz.carapp.rentcarapp.config.Constants;
+import uz.carapp.rentcarapp.domain.MerchantBranch;
 import uz.carapp.rentcarapp.domain.MerchantRole;
 import uz.carapp.rentcarapp.domain.User;
 import uz.carapp.rentcarapp.domain.enumeration.MerchantRoleEnum;
@@ -195,6 +196,13 @@ public class AccountResource {
 
         User user = userRepository.findOneByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Optional<MerchantBranch> optionalBranchMerchant = merchantBranchRepository.getMerchantBranchById(user.getId(),
+                request.getMerchantBranchId());
+
+        if(optionalBranchMerchant.isEmpty()) {
+            throw new BadRequestCustomException("Branch not found","","");
+        }
 
         List<MerchantRole> merchantRoles = merchantRoleRepository.findByUserIdAndMerchantIdAndBranchId(user.getId(),
                 request.getMerchantId(), request.getMerchantBranchId());

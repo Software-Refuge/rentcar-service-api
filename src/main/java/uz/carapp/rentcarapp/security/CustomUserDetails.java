@@ -11,7 +11,7 @@ public class CustomUserDetails extends User {
     private Long branchId;
     private Long merchantId;
 
-    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, Long branchId, Long merchantId) {
+    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, Long branchId, Long merchantId, Long userId) {
         super(username, password, authorities);
         this.userId = userId;
         this.branchId = branchId;
