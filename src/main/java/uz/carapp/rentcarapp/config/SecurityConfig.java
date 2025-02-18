@@ -60,7 +60,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/account/create-user").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/account/list").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Attachment----------------------#
-                            .requestMatchers("/api/attachments/save-file").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/attachments/save-file").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.OWNER)
                             //#--------------Color---------------------------#
                             .requestMatchers("/api/v1/colors/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Model---------------------------#
@@ -76,6 +76,8 @@ public class SecurityConfig {
                             .requestMatchers("/api/merchant/car-params/**").hasAuthority(AuthoritiesConstants.OWNER)
                             .requestMatchers("/api/car-templates/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/car-template-params/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/merchant/car-attachments/**").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/merchant/car-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.OWNER)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

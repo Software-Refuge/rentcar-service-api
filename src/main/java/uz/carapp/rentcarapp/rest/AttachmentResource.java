@@ -38,7 +38,7 @@ public class AttachmentResource {
     @PostMapping(value = "/attachments/save-file", consumes ={MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAnyAuthority(T(uz.carapp.rentcarapp.security.AuthoritiesConstants).ADMIN, T(uz.carapp.rentcarapp.security.AuthoritiesConstants).OWNER)")
     public ResponseEntity<AttachmentDTO> saveFile(@RequestPart(value = "multipartFile") MultipartFile multipartFile,
                                                   @RequestParam(value = "attTypeEnum") AttachmentTypeEnum attTypeEnum) throws Exception {
         AttachmentDTO attachmentDTO = attachmentService.saveFile(multipartFile, attTypeEnum);
