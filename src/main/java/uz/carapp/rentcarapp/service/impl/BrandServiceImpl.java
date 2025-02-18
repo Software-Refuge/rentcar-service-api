@@ -80,7 +80,8 @@ public class BrandServiceImpl implements BrandService {
     @Transactional(readOnly = true)
     public Page<BrandDTO> findAll(Pageable pageable) {
         LOG.info("Request to get all Brands");
-        List<BrandDTO> list = brandRepository.findAll(pageable).stream().map(brandMapper::toDto)
+        Page<Brand> page = brandRepository.findAll(pageable);
+        List<BrandDTO> list = page.stream().map(brandMapper::toDto)
                 .map(brandDTO -> {
                     AttachmentDTO attachment = brandDTO.getAttachment();
                     if (attachment != null) {
@@ -90,7 +91,7 @@ public class BrandServiceImpl implements BrandService {
                     return brandDTO;
                 }).toList();
 
-        return new PageImpl<>(list);
+        return new PageImpl<>(list,pageable,page.getTotalElements());
     }
 
     @Override
