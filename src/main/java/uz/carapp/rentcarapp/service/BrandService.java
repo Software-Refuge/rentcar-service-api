@@ -1,5 +1,7 @@
 package uz.carapp.rentcarapp.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
 import uz.carapp.rentcarapp.service.dto.BrandEditDTO;
 import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
@@ -40,7 +42,7 @@ public interface BrandService {
      *
      * @return the list of entities.
      */
-    List<BrandDTO> findAll();
+    Page<BrandDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" brand.

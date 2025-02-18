@@ -3,6 +3,9 @@ package uz.carapp.rentcarapp.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Brand;
@@ -75,17 +78,19 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BrandDTO> findAll() {
-        LOG.debug("Request to get all Brands");
-        return brandRepository.findAll().stream().map(brandMapper::toDto)
+    public Page<BrandDTO> findAll(Pageable pageable) {
+        LOG.info("Request to get all Brands");
+        List<BrandDTO> list = brandRepository.findAll(pageable).stream().map(brandMapper::toDto)
                 .map(brandDTO -> {
                     AttachmentDTO attachment = brandDTO.getAttachment();
-                    if(attachment!=null) {
-                        attachment.setPath(BASE_URL+ File.separator +attachment.getPath());
+                    if (attachment != null) {
+                        attachment.setPath(BASE_URL + File.separator + attachment.getPath());
                         brandDTO.setAttachment(attachment);
                     }
                     return brandDTO;
-                }).collect(Collectors.toCollection(LinkedList::new));
+                }).toList();
+
+        return new PageImpl<>(list);
     }
 
     @Override
