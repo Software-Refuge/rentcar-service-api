@@ -74,6 +74,8 @@ public class SecurityConfig {
                             //#--------------Car-----------------------------#
                             .requestMatchers("/api/merchant/cars/**").hasAuthority(AuthoritiesConstants.OWNER)
                             .requestMatchers("/api/merchant/car-params/**").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/car-templates/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/car-template-params/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(
