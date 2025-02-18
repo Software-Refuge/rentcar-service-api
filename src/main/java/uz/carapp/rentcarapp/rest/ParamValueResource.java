@@ -1,5 +1,6 @@
 package uz.carapp.rentcarapp.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,10 +111,12 @@ public class ParamValueResource {
      */
     @GetMapping("")
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<ParamValueDTO>> getAllParamValues(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.info("REST request to get a page of ParamValues");
-        Page<ParamValueDTO> page = paramValueService.findAll(pageable);
+    @PreAuthorize("hasAnyAuthority(T(uz.carapp.rentcarapp.security.AuthoritiesConstants).ADMIN, T(uz.carapp.rentcarapp.security.AuthoritiesConstants).OWNER)")
+    @Operation(summary = "Get ParamValue list by paramId")
+    public ResponseEntity<List<ParamValueDTO>> getAllParamValues(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                                 @RequestParam(value = "paramId") Long paramId) {
+        LOG.info("REST request to get a page of ParamValues by paramId");
+        Page<ParamValueDTO> page = paramValueService.findAll(pageable, paramId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -42,7 +42,7 @@ public interface ParamValueService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<ParamValueDTO> findAll(Pageable pageable);
+    Page<ParamValueDTO> findAll(Pageable pageable, Long paramId);
 
     /**
      * Get the "id" paramValue.

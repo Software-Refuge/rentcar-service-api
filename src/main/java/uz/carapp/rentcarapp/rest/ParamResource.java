@@ -111,7 +111,7 @@ public class ParamResource {
      */
     @GetMapping("")
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAnyAuthority(T(uz.carapp.rentcarapp.security.AuthoritiesConstants).ADMIN, T(uz.carapp.rentcarapp.security.AuthoritiesConstants).OWNER)")
     public ResponseEntity<List<ParamDTO>> getAllParams(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.info("REST request to get a page of Params");
         Page<ParamDTO> page = paramService.findAll(pageable);

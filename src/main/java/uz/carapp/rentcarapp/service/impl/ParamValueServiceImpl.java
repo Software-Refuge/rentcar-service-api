@@ -70,21 +70,21 @@ public class ParamValueServiceImpl implements ParamValueService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ParamValueDTO> findAll(Pageable pageable) {
-        LOG.debug("Request to get all ParamValues");
-        return paramValueRepository.findAll(pageable).map(paramValueMapper::toDto);
+    public Page<ParamValueDTO> findAll(Pageable pageable, Long paramId) {
+        LOG.info("Request to get all ParamValues by paramId");
+        return paramValueRepository.findAllByParamId(pageable,paramId).map(paramValueMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<ParamValueDTO> findOne(Long id) {
-        LOG.debug("Request to get ParamValue : {}", id);
+        LOG.info("Request to get ParamValue : {}", id);
         return paramValueRepository.findById(id).map(paramValueMapper::toDto);
     }
 
     @Override
     public void delete(Long id) {
-        LOG.debug("Request to delete ParamValue : {}", id);
+        LOG.info("Request to delete ParamValue : {}", id);
         paramValueRepository.deleteById(id);
     }
 }
