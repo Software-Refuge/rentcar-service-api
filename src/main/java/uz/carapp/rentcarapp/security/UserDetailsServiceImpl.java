@@ -188,6 +188,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setLogin(user.getLogin());
         user.setLastName(userRegDTO.getLastName());
         user.setFirstName(userRegDTO.getFirstName());
+        user.setMiddleName(userRegDTO.getMiddleName());
         user.setPassword(passwordEncoder.encode(userRegDTO.getPassword()));
         user.setLogin(userRegDTO.getEmail());
         user.setEmail(userRegDTO.getEmail());
@@ -195,7 +196,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setGender(GenderEnum.MALE);
         user.setBirthdate(userRegDTO.getBirthDate());
         user.setStatus(userRegDTO.isStatus());
-        user.setPhoneNumber(userRegDTO.getPhone());
+        user.setPhone(userRegDTO.getPhone());
         user.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         Set<Authority> authorities;
         authorities = new HashSet<>(Collections.singletonList(authorityRepository.findByName(AuthoritiesConstants.USER)));
@@ -212,11 +213,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userRegDTO.setId(user.getId());
             userRegDTO.setLastName(user.getLastName());
             userRegDTO.setFirstName(user.getFirstName());
+            userRegDTO.setMiddleName(user.getMiddleName());
             userRegDTO.setBirthDate(user.getBirthdate());
             userRegDTO.setEmail(user.getEmail());
             userRegDTO.setGender(user.getGender());
             userRegDTO.setStatus(user.isStatus());
-            userRegDTO.setPhone(user.getPhoneNumber());
+            userRegDTO.setPhone(user.getPhone());
             userRegDTO.setRoles(user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
             return userRegDTO;
         }).stream().toList();

@@ -36,7 +36,7 @@ public class UserAccountDTO implements Serializable {
 
     private boolean activated = false;
 
-    private String phoneNumber;
+    private String phone;
     private boolean status;
     private Set<String> authorities;
 

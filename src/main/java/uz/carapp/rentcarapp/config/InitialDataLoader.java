@@ -46,7 +46,7 @@ public class InitialDataLoader implements CommandLineRunner {
             adminUser.setLogin("admin@gmail.com");
             adminUser.setPassword(passwordEncoder.encode("12345678"));
             adminUser.setEmail("admin@gmail.com");
-            adminUser.setPhoneNumber("+998991234567");
+            adminUser.setPhone("+998991234567");
             adminUser.setStatus(true);
             adminUser.setActivated(true);
             adminUser.setGender(GenderEnum.MALE);
