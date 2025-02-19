@@ -26,7 +26,9 @@ import uz.carapp.rentcarapp.repository.MerchantRoleRepository;
 import uz.carapp.rentcarapp.repository.UserRepository;
 import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.service.dto.UserAccountDTO;
+import uz.carapp.rentcarapp.service.dto.UserDTO;
 import uz.carapp.rentcarapp.service.dto.UserRegDTO;
+import uz.carapp.rentcarapp.service.mapper.UserMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,12 +47,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     private final MerchantRoleRepository merchantRoleRepository;
+    private final UserMapper userMapper;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository, @Lazy PasswordEncoder passwordEncoder, MerchantRoleRepository merchantRoleRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository, @Lazy PasswordEncoder passwordEncoder, MerchantRoleRepository merchantRoleRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
         this.merchantRoleRepository = merchantRoleRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -177,7 +181,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return true;
     }
 
-    public Long createUser(@Valid UserRegDTO userRegDTO) {
+    public UserDTO createUser(@Valid UserRegDTO userRegDTO) {
 
         User user = new User();
 
@@ -191,14 +195,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setGender(GenderEnum.MALE);
         user.setBirthdate(userRegDTO.getBirthDate());
         user.setStatus(userRegDTO.isStatus());
-        user.setPhoneNumber(user.getPhoneNumber());
+        user.setPhoneNumber(userRegDTO.getPhone());
         user.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         Set<Authority> authorities;
         authorities = new HashSet<>(Collections.singletonList(authorityRepository.findByName(AuthoritiesConstants.USER)));
         user.setAuthorities(authorities);
 
-        User save = userRepository.save(user);
-        return save.getId();
+        User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
     public Page<UserRegDTO> findAll(Pageable pageable) {

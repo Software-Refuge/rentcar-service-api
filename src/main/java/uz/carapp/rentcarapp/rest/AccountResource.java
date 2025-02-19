@@ -44,6 +44,7 @@ import uz.carapp.rentcarapp.security.jwt.JwtProvider;
 import uz.carapp.rentcarapp.security.jwt.JwtUtil;
 import uz.carapp.rentcarapp.service.dto.MerchantSelectDTO;
 import uz.carapp.rentcarapp.service.dto.UserAccountDTO;
+import uz.carapp.rentcarapp.service.dto.UserDTO;
 import uz.carapp.rentcarapp.service.dto.UserRegDTO;
 
 import java.util.*;
@@ -113,13 +114,13 @@ public class AccountResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Create user")
-    public ResponseEntity<Long> createUser(@Valid @RequestBody UserRegDTO userRegDTO) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserRegDTO userRegDTO) {
         log.info("REST request to create user: {}", userRegDTO);
         if(userRepository.findOneByEmailIgnoreCase(userRegDTO.getEmail().toLowerCase()).isPresent()) {
             throw new BadRequestCustomException("Email address already in use","","");
         }
-        Long userId = userService.createUser(userRegDTO);
-        return ResponseEntity.ok().body(userId);
+        UserDTO user = userService.createUser(userRegDTO);
+        return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/account/list")
