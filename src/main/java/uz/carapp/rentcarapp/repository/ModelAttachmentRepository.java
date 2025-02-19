@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.carapp.rentcarapp.domain.ModelAttachment;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Spring Data JPA repository for the ModelAttachment entity.
  */
@@ -20,4 +23,7 @@ public interface ModelAttachmentRepository extends JpaRepository<ModelAttachment
     @Modifying
     @Query(value = "UPDATE ModelAttachment ma SET ma.isMain = true WHERE ma.model.id=:modelId and ma.attachment.id=:attachmentId")
     void setMainPhoto(Long modelId, Long attachmentId);
+
+    @Query(value = "select m from ModelAttachment m where m.model.id in :modelIds and m.isMain=true")
+    List<ModelAttachment> getModelMainPhotoByIds(Set<Long> modelIds);
 }

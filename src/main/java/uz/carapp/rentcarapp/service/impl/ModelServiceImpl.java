@@ -2,19 +2,32 @@ package uz.carapp.rentcarapp.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.domain.Model;
+import uz.carapp.rentcarapp.domain.ModelAttachment;
+import uz.carapp.rentcarapp.repository.AttachmentRepository;
+import uz.carapp.rentcarapp.repository.ModelAttachmentRepository;
 import uz.carapp.rentcarapp.repository.ModelRepository;
 import uz.carapp.rentcarapp.service.ModelService;
+import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.dto.ModelDTO;
 import uz.carapp.rentcarapp.service.dto.ModelEditDTO;
 import uz.carapp.rentcarapp.service.dto.ModelSaveDTO;
+import uz.carapp.rentcarapp.service.mapper.AttachmentMapper;
 import uz.carapp.rentcarapp.service.mapper.ModelMapper;
 
+import java.io.File;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Model}.
@@ -28,10 +41,19 @@ public class ModelServiceImpl implements ModelService {
     private final ModelRepository modelRepository;
 
     private final ModelMapper modelMapper;
+    private final AttachmentRepository attachmentRepository;
+    private final ModelAttachmentRepository modelAttachmentRepository;
+    private final AttachmentMapper attachmentMapper;
 
-    public ModelServiceImpl(ModelRepository modelRepository, ModelMapper modelMapper) {
+    @Value("${minio.external}")
+    private String BASE_URL;
+
+    public ModelServiceImpl(ModelRepository modelRepository, ModelMapper modelMapper, AttachmentRepository attachmentRepository, ModelAttachmentRepository modelAttachmentRepository, AttachmentMapper attachmentMapperImpl) {
         this.modelRepository = modelRepository;
         this.modelMapper = modelMapper;
+        this.attachmentRepository = attachmentRepository;
+        this.modelAttachmentRepository = modelAttachmentRepository;
+        this.attachmentMapper = attachmentMapperImpl;
     }
 
     @Override
@@ -68,8 +90,29 @@ public class ModelServiceImpl implements ModelService {
     @Override
     @Transactional(readOnly = true)
     public Page<ModelDTO> findAll(Pageable pageable) {
-        LOG.debug("Request to get all Models");
-        return modelRepository.findAll(pageable).map(modelMapper::toDto);
+        LOG.info("Request to get all Models");
+        Page<Model> models = modelRepository.findAll(pageable);
+        Set<Long> modelIds = models.getContent().stream().map(Model::getId).collect(Collectors.toSet());
+
+        Map<Long, List<Attachment>> modelAttachmentMap = modelAttachmentRepository.getModelMainPhotoByIds(modelIds).stream()
+                .collect(Collectors.groupingBy(modelAttachment -> modelAttachment.getModel().getId(),
+                        Collectors.mapping(ModelAttachment::getAttachment, Collectors.toList())));
+
+
+        List<ModelDTO> list = models.stream().map(modelMapper::toDto)
+                .map(modelDTO -> {
+                    ;
+                    List<Attachment> attachments = modelAttachmentMap.get(modelDTO.getId());
+                    if (!attachments.isEmpty()) {
+                        Attachment attachment = attachments.get(0);
+                        AttachmentDTO dto = attachmentMapper.toDto(attachment);
+                        dto.setPath(BASE_URL + File.separator + dto.getPath());
+                        modelDTO.setAttachmentDTO(dto);
+                    }
+                    return modelDTO;
+                }).toList();
+
+        return new PageImpl<>(list,pageable,models.getTotalElements());
     }
 
     @Override
