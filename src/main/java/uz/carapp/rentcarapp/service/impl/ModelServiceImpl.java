@@ -17,7 +17,7 @@ import uz.carapp.rentcarapp.repository.ModelRepository;
 import uz.carapp.rentcarapp.service.ModelService;
 import uz.carapp.rentcarapp.service.dto.*;
 import uz.carapp.rentcarapp.service.mapper.AttachmentMapper;
-import uz.carapp.rentcarapp.service.mapper.ModelAttachmentMapperImpl;
+import uz.carapp.rentcarapp.service.mapper.ModelAttachmentMapper;
 import uz.carapp.rentcarapp.service.mapper.ModelMapper;
 
 import java.io.File;
@@ -39,21 +39,19 @@ public class ModelServiceImpl implements ModelService {
     private final ModelRepository modelRepository;
 
     private final ModelMapper modelMapper;
-    private final AttachmentRepository attachmentRepository;
     private final ModelAttachmentRepository modelAttachmentRepository;
     private final AttachmentMapper attachmentMapper;
-    private final ModelAttachmentMapperImpl modelAttachmentMapperImpl;
+    private final ModelAttachmentMapper modelAttachmentMapper;
 
     @Value("${minio.external}")
     private String BASE_URL;
 
-    public ModelServiceImpl(ModelRepository modelRepository, ModelMapper modelMapper, AttachmentRepository attachmentRepository, ModelAttachmentRepository modelAttachmentRepository, AttachmentMapper attachmentMapperImpl, ModelAttachmentMapperImpl modelAttachmentMapperImpl) {
+    public ModelServiceImpl(ModelRepository modelRepository, ModelMapper modelMapper, ModelAttachmentRepository modelAttachmentRepository, AttachmentMapper attachmentMapperImpl, ModelAttachmentMapper modelAttachmentMapperImpl) {
         this.modelRepository = modelRepository;
         this.modelMapper = modelMapper;
-        this.attachmentRepository = attachmentRepository;
         this.modelAttachmentRepository = modelAttachmentRepository;
         this.attachmentMapper = attachmentMapperImpl;
-        this.modelAttachmentMapperImpl = modelAttachmentMapperImpl;
+        this.modelAttachmentMapper = modelAttachmentMapperImpl;
     }
 
     @Override
@@ -126,7 +124,7 @@ public class ModelServiceImpl implements ModelService {
                 .map(modelDTO -> {
                     List<ModelAttachment> modelAttachments = modelAttachmentRepository.getModelId(id);
                     if(!modelAttachments.isEmpty()) {
-                        List<ModelAttachmentDTO> collect = modelAttachmentMapperImpl.toDto(modelAttachments)
+                        List<ModelAttachmentDTO> collect = modelAttachmentMapper.toDto(modelAttachments)
                                 .stream()
                                 .map(modelAttachmentDTO -> {
                                     AttachmentDTO attachment = modelAttachmentDTO.getAttachment();
