@@ -18,7 +18,7 @@ public class ModelAttachmentDTO implements Serializable {
 
     private Long id;
 
-    private Boolean isMain;
+    private boolean isMain;
 
     private ModelDTO model;
 
