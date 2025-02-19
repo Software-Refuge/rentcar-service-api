@@ -105,7 +105,7 @@ public class ModelServiceImpl implements ModelService {
                         AttachmentDTO dto = attachmentMapper.toDto(attachment);
                         dto.setPath(BASE_URL + File.separator + dto.getPath());
                         ModelAttachmentDTO modelAttachmentDTO = new ModelAttachmentDTO();
-                        modelAttachmentDTO.setIsMain(true);
+                        modelAttachmentDTO.setMain(true);
                         modelAttachmentDTO.setAttachment(dto);
                         modelDTO.setModelAttachment(List.of(modelAttachmentDTO));
                     }

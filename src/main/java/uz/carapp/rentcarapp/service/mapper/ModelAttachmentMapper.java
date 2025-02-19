@@ -19,7 +19,6 @@ import uz.carapp.rentcarapp.service.dto.ModelDTO;
 public interface ModelAttachmentMapper extends EntityMapper<ModelAttachmentDTO, ModelAttachment> {
     @Mapping(target = "model", source = "model", qualifiedByName = "modelId")
     @Mapping(target = "attachment", source = "attachment", qualifiedByName = "attachmentId")
-    @Mapping(target = "isMain", source = "isMain")
     ModelAttachmentDTO toDto(ModelAttachment s);
 
     @Named("modelId")
