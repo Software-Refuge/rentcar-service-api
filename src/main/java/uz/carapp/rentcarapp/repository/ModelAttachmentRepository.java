@@ -26,4 +26,7 @@ public interface ModelAttachmentRepository extends JpaRepository<ModelAttachment
 
     @Query(value = "select m from ModelAttachment m where m.model.id in :modelIds and m.isMain=true")
     List<ModelAttachment> getModelMainPhotoByIds(Set<Long> modelIds);
+
+    @Query(value = "select m from ModelAttachment m where m.model.id=:modelId")
+    List<ModelAttachment> getModelId(Long modelId);
 }

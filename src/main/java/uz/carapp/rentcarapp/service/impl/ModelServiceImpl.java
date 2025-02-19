@@ -15,11 +15,9 @@ import uz.carapp.rentcarapp.repository.AttachmentRepository;
 import uz.carapp.rentcarapp.repository.ModelAttachmentRepository;
 import uz.carapp.rentcarapp.repository.ModelRepository;
 import uz.carapp.rentcarapp.service.ModelService;
-import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
-import uz.carapp.rentcarapp.service.dto.ModelDTO;
-import uz.carapp.rentcarapp.service.dto.ModelEditDTO;
-import uz.carapp.rentcarapp.service.dto.ModelSaveDTO;
+import uz.carapp.rentcarapp.service.dto.*;
 import uz.carapp.rentcarapp.service.mapper.AttachmentMapper;
+import uz.carapp.rentcarapp.service.mapper.ModelAttachmentMapperImpl;
 import uz.carapp.rentcarapp.service.mapper.ModelMapper;
 
 import java.io.File;
@@ -44,16 +42,18 @@ public class ModelServiceImpl implements ModelService {
     private final AttachmentRepository attachmentRepository;
     private final ModelAttachmentRepository modelAttachmentRepository;
     private final AttachmentMapper attachmentMapper;
+    private final ModelAttachmentMapperImpl modelAttachmentMapperImpl;
 
     @Value("${minio.external}")
     private String BASE_URL;
 
-    public ModelServiceImpl(ModelRepository modelRepository, ModelMapper modelMapper, AttachmentRepository attachmentRepository, ModelAttachmentRepository modelAttachmentRepository, AttachmentMapper attachmentMapperImpl) {
+    public ModelServiceImpl(ModelRepository modelRepository, ModelMapper modelMapper, AttachmentRepository attachmentRepository, ModelAttachmentRepository modelAttachmentRepository, AttachmentMapper attachmentMapperImpl, ModelAttachmentMapperImpl modelAttachmentMapperImpl) {
         this.modelRepository = modelRepository;
         this.modelMapper = modelMapper;
         this.attachmentRepository = attachmentRepository;
         this.modelAttachmentRepository = modelAttachmentRepository;
         this.attachmentMapper = attachmentMapperImpl;
+        this.modelAttachmentMapperImpl = modelAttachmentMapperImpl;
     }
 
     @Override
@@ -101,13 +101,15 @@ public class ModelServiceImpl implements ModelService {
 
         List<ModelDTO> list = models.stream().map(modelMapper::toDto)
                 .map(modelDTO -> {
-                    ;
                     List<Attachment> attachments = modelAttachmentMap.get(modelDTO.getId());
                     if (!attachments.isEmpty()) {
                         Attachment attachment = attachments.get(0);
                         AttachmentDTO dto = attachmentMapper.toDto(attachment);
                         dto.setPath(BASE_URL + File.separator + dto.getPath());
-                        modelDTO.setAttachmentDTO(dto);
+                        ModelAttachmentDTO modelAttachmentDTO = new ModelAttachmentDTO();
+                        modelAttachmentDTO.setIsMain(true);
+                        modelAttachmentDTO.setAttachment(dto);
+                        modelDTO.setModelAttachment(List.of(modelAttachmentDTO));
                     }
                     return modelDTO;
                 }).toList();
@@ -118,8 +120,25 @@ public class ModelServiceImpl implements ModelService {
     @Override
     @Transactional(readOnly = true)
     public Optional<ModelDTO> findOne(Long id) {
-        LOG.debug("Request to get Model : {}", id);
-        return modelRepository.findById(id).map(modelMapper::toDto);
+        LOG.info("Request to get Model : {}", id);
+
+        return modelRepository.findById(id).map(modelMapper::toDto)
+                .map(modelDTO -> {
+                    List<ModelAttachment> modelAttachments = modelAttachmentRepository.getModelId(id);
+                    if(!modelAttachments.isEmpty()) {
+                        List<ModelAttachmentDTO> collect = modelAttachmentMapperImpl.toDto(modelAttachments)
+                                .stream()
+                                .map(modelAttachmentDTO -> {
+                                    AttachmentDTO attachment = modelAttachmentDTO.getAttachment();
+                                    attachment.setPath(BASE_URL + File.separator + attachment.getPath());
+                                    modelAttachmentDTO.setAttachment(attachment);
+
+                                    return modelAttachmentDTO;
+                                }).collect(Collectors.toList());
+                        modelDTO.setModelAttachment(collect);
+                    }
+                    return modelDTO;
+                });
     }
 
     @Override

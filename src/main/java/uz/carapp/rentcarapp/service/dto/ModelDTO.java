@@ -1,10 +1,12 @@
 package uz.carapp.rentcarapp.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,5 +26,6 @@ public class ModelDTO implements Serializable {
 
     private BrandDTO brand;
 
-    AttachmentDTO attachmentDTO;
+    @JsonIgnoreProperties(value = "model")
+    List<ModelAttachmentDTO> modelAttachment;
 }
