@@ -14,7 +14,7 @@ import uz.carapp.rentcarapp.domain.CarAttachment;
 public interface CarAttachmentRepository extends JpaRepository<CarAttachment, Long> {
 
     @Modifying
-    @Query(value = "UPDATE CarAttachment ca SET ca.isMain = false WHERE ca.isMain=true and ca.car.id=:carId")
+    @Query(value = "UPDATE CarAttachment ca SET ca.isMain = false WHERE ca.car.id=:carId AND ca.isMain=true")
     void removeOldMainPhoto(Long carId);
 
 
