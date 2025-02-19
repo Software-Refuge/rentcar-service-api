@@ -10,6 +10,7 @@ import uz.carapp.rentcarapp.domain.ModelAttachment;
 import uz.carapp.rentcarapp.repository.ModelAttachmentRepository;
 import uz.carapp.rentcarapp.service.ModelAttachmentService;
 import uz.carapp.rentcarapp.service.dto.ModelAttachmentDTO;
+import uz.carapp.rentcarapp.service.dto.ModelAttachmentSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.ModelAttachmentMapper;
 
 import java.util.Optional;
@@ -36,9 +37,9 @@ public class ModelAttachmentServiceImpl implements ModelAttachmentService {
     }
 
     @Override
-    public ModelAttachmentDTO save(ModelAttachmentDTO modelAttachmentDTO) {
-        LOG.debug("Request to save ModelAttachment : {}", modelAttachmentDTO);
-        ModelAttachment modelAttachment = modelAttachmentMapper.toEntity(modelAttachmentDTO);
+    public ModelAttachmentDTO save(ModelAttachmentSaveDTO modelAttachmentSaveDTO) {
+        LOG.info("Request to save ModelAttachment : {}", modelAttachmentSaveDTO);
+        ModelAttachment modelAttachment = modelAttachmentMapper.toEntity(modelAttachmentSaveDTO);
         modelAttachment = modelAttachmentRepository.save(modelAttachment);
         return modelAttachmentMapper.toDto(modelAttachment);
     }

@@ -9,6 +9,7 @@ import uz.carapp.rentcarapp.domain.Model;
 import uz.carapp.rentcarapp.domain.ModelAttachment;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.dto.ModelAttachmentDTO;
+import uz.carapp.rentcarapp.service.dto.ModelAttachmentSaveDTO;
 import uz.carapp.rentcarapp.service.dto.ModelDTO;
 
 /**
@@ -29,4 +30,8 @@ public interface ModelAttachmentMapper extends EntityMapper<ModelAttachmentDTO, 
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     AttachmentDTO toDtoAttachmentId(Attachment attachment);
+
+    @Mapping(target = "model.id",source = "modelId")
+    @Mapping(target = "attachment.id",source = "attachmentId")
+    ModelAttachment toEntity(ModelAttachmentSaveDTO dto);
 }

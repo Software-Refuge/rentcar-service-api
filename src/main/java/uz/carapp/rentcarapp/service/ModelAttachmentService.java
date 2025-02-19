@@ -3,6 +3,7 @@ package uz.carapp.rentcarapp.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.carapp.rentcarapp.service.dto.ModelAttachmentDTO;
+import uz.carapp.rentcarapp.service.dto.ModelAttachmentSaveDTO;
 
 import java.util.Optional;
 
@@ -13,10 +14,10 @@ public interface ModelAttachmentService {
     /**
      * Save a modelAttachment.
      *
-     * @param modelAttachmentDTO the entity to save.
+     * @param modelAttachmentSaveDTO the entity to save.
      * @return the persisted entity.
      */
-    ModelAttachmentDTO save(ModelAttachmentDTO modelAttachmentDTO);
+    ModelAttachmentDTO save(ModelAttachmentSaveDTO modelAttachmentSaveDTO);
 
     /**
      * Updates a modelAttachment.

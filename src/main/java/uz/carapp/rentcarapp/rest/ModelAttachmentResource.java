@@ -21,6 +21,7 @@ import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.security.AuthoritiesConstants;
 import uz.carapp.rentcarapp.service.ModelAttachmentService;
 import uz.carapp.rentcarapp.service.dto.ModelAttachmentDTO;
+import uz.carapp.rentcarapp.service.dto.ModelAttachmentSaveDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,7 +58,7 @@ public class ModelAttachmentResource {
     /**
      * {@code POST  /model-attachments} : Create a new modelAttachment.
      *
-     * @param modelAttachmentDTO the modelAttachmentDTO to create.
+     * @param modelAttachmentSaveDTO the modelAttachmentDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new modelAttachmentDTO, or with status {@code 400 (Bad Request)} if the modelAttachment has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -65,13 +66,11 @@ public class ModelAttachmentResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Attach image to car")
-    public ResponseEntity<ModelAttachmentDTO> createModelAttachment(@RequestBody ModelAttachmentDTO modelAttachmentDTO)
+    public ResponseEntity<ModelAttachmentDTO> createModelAttachment(@RequestBody ModelAttachmentSaveDTO modelAttachmentSaveDTO)
         throws URISyntaxException {
-        LOG.info("REST request to save ModelAttachment : {}", modelAttachmentDTO);
-        if (modelAttachmentDTO.getId() != null) {
-            throw new BadRequestAlertException("A new modelAttachment cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        modelAttachmentDTO = modelAttachmentService.save(modelAttachmentDTO);
+        LOG.info("REST request to save ModelAttachment : {}", modelAttachmentSaveDTO);
+
+        ModelAttachmentDTO modelAttachmentDTO = modelAttachmentService.save(modelAttachmentSaveDTO);
         return ResponseEntity.created(new URI("/api/model-attachments/" + modelAttachmentDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, modelAttachmentDTO.getId().toString()))
             .body(modelAttachmentDTO);
