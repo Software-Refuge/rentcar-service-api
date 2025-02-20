@@ -52,7 +52,7 @@ public interface CarMapper extends EntityMapper<CarDTO, Car> {
 
         // Model nomini tarjima qilish
         dto.getModel().setName(
-                translationRepository.findTranslationByFieldName("MODEL", car.getModel().getName(), LanguageEnum.valueOf(lang))
+                translationRepository.findTranslationByName("MODEL", car.getModel().getName(), LanguageEnum.valueOf(lang))
                         .orElse(car.getModel().getName())
         );
 
