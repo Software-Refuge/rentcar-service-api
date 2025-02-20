@@ -34,15 +34,12 @@ public class Translation extends AbstractAuditingEntity<Long> implements Seriali
     @Column(name = "entity_id")
     private Long entityId;
 
-    @Column(name = "field_name")
-    private String fieldName;
+    @Column(name = "name")
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "lang")
     private LanguageEnum lang;
-
-    @Column(name = "value")
-    private String value;
 
     @Column(name = "description")
     private String description;
