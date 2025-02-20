@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.domain.enumeration.AttachmentTypeEnum;
 import uz.carapp.rentcarapp.repository.AttachmentRepository;
-import uz.carapp.rentcarapp.repository.BrandRepository;
-import uz.carapp.rentcarapp.service.AttachmentService;
 import uz.carapp.rentcarapp.service.MinioService;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.mapper.AttachmentMapper;
@@ -23,9 +21,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Service
-public class AttachmentServiceImpl implements AttachmentService {
+public class AttachmentService implements uz.carapp.rentcarapp.service.AttachmentService {
 
-    private final Logger log = LoggerFactory.getLogger(AttachmentServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(AttachmentService.class);
 
     private final MinioService minioService;
 
@@ -39,7 +37,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Value("${minio.external}")
     private String BASE_URL;
 
-    public AttachmentServiceImpl(MinioService minioService, AttachmentMapper attachmentMapper, AttachmentRepository attachmentRepository) {
+    public AttachmentService(MinioService minioService, AttachmentMapper attachmentMapper, AttachmentRepository attachmentRepository) {
         this.minioService = minioService;
         this.attachmentMapper = attachmentMapper;
         this.attachmentRepository = attachmentRepository;

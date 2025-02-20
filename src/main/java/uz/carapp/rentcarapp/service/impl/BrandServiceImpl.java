@@ -21,10 +21,8 @@ import uz.carapp.rentcarapp.service.dto.BrandSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.BrandMapper;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Brand}.
@@ -39,15 +37,17 @@ public class BrandServiceImpl implements BrandService {
 
     private final BrandMapper brandMapper;
     private final AttachmentRepository attachmentRepository;
+    private final AttachmentService attachmentService;
 
     @Value("${minio.external}")
     private String BASE_URL;
 
 
-    public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper, AttachmentRepository attachmentRepository) {
+    public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper, AttachmentRepository attachmentRepository, AttachmentService attachmentServiceImpl) {
         this.brandRepository = brandRepository;
         this.brandMapper = brandMapper;
         this.attachmentRepository = attachmentRepository;
+        this.attachmentService = attachmentServiceImpl;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class BrandServiceImpl implements BrandService {
             Long oldAttachmentId = brand.getAttachment().getId();
             brand.setAttachment(null);
             brandRepository.save(brand);
-            attachmentRepository.deleteById(oldAttachmentId);
+            attachmentService.delete(oldAttachmentId);
         }
 
         // Yangi attachmentni o‘rnatish
