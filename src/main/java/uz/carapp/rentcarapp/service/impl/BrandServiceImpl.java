@@ -8,9 +8,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.domain.Brand;
 import uz.carapp.rentcarapp.repository.AttachmentRepository;
 import uz.carapp.rentcarapp.repository.BrandRepository;
+import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.service.BrandService;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.dto.BrandDTO;
@@ -122,7 +124,21 @@ public class BrandServiceImpl implements BrandService {
     public void uploadImage(Long brandId, Long attachmentId) {
         LOG.info("Request to upload image by brandId:{} and attachmentId:{}",brandId,attachmentId);
 
-        brandRepository.updateBrandById(brandId,attachmentId);
-        attachmentRepository.deleteById(attachmentId);
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new BadRequestCustomException("Brand not found","",""));
+
+        if(brand.getAttachment()!=null) {
+            Long oldAttachmentId = brand.getAttachment().getId();
+            brand.setAttachment(null);
+            brandRepository.save(brand);
+            attachmentRepository.deleteById(oldAttachmentId);
+        }
+
+        // Yangi attachmentni o‘rnatish
+        Attachment newAttachment = attachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new BadRequestCustomException("Attachment not found","",""));
+
+        brand.setAttachment(newAttachment);
+        brandRepository.save(brand);
     }
 }
