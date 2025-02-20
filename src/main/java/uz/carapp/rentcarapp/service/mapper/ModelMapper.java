@@ -19,6 +19,8 @@ public interface ModelMapper extends EntityMapper<ModelDTO, Model> {
     @Named("brandId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "status", source = "status")
     BrandDTO toDtoBrandId(Brand brand);
 
     @Mappings({

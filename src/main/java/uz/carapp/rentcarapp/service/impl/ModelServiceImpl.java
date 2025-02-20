@@ -100,7 +100,7 @@ public class ModelServiceImpl implements ModelService {
         List<ModelDTO> list = models.stream().map(modelMapper::toDto)
                 .map(modelDTO -> {
                     List<Attachment> attachments = modelAttachmentMap.get(modelDTO.getId());
-                    if (!attachments.isEmpty()) {
+                    if (attachments!=null && !attachments.isEmpty()) {
                         Attachment attachment = attachments.get(0);
                         AttachmentDTO dto = attachmentMapper.toDto(attachment);
                         dto.setPath(BASE_URL + File.separator + dto.getPath());
@@ -123,7 +123,7 @@ public class ModelServiceImpl implements ModelService {
         return modelRepository.findById(id).map(modelMapper::toDto)
                 .map(modelDTO -> {
                     List<ModelAttachment> modelAttachments = modelAttachmentRepository.getModelId(id);
-                    if(!modelAttachments.isEmpty()) {
+                    if(modelAttachments!=null&&!modelAttachments.isEmpty()) {
                         List<ModelAttachmentDTO> collect = modelAttachmentMapper.toDto(modelAttachments)
                                 .stream()
                                 .map(modelAttachmentDTO -> {
