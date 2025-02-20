@@ -15,14 +15,14 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 @Repository
 public interface TranslationRepository extends JpaRepository<Translation, Long> {
-    @Query("SELECT t.value FROM Translation t WHERE t.entityType = :entityType AND t.entityId = :entityId AND t.lang = :lang")
+    @Query("SELECT t.name FROM Translation t WHERE t.entityType = :entityType AND t.entityId = :entityId AND t.lang = :lang")
     Optional<String> findTranslation(@Param("entityType") String entityType,
                                      @Param("entityId") Long entityId,
                                      @Param("lang") LanguageEnum lang);
 
-    @Query("SELECT t.value FROM Translation t WHERE t.entityType = :entityType AND t.fieldName = :fieldName AND t.lang = :lang")
+    @Query("SELECT t.name FROM Translation t WHERE t.entityType = :entityType AND t.name = :name AND t.lang = :lang")
     Optional<String> findTranslationByFieldName(@Param("entityType") String entityType,
-                                     @Param("fieldName") String fieldName,
+                                     @Param("fieldName") String name,
                                      @Param("lang") LanguageEnum lang);
 
 }
