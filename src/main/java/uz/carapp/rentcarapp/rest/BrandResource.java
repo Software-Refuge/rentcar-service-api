@@ -141,6 +141,18 @@ public class BrandResource {
         return ResponseUtil.wrapOrNotFound(brandDTO);
     }
 
+    @PostMapping("/update-image")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @Operation(summary = "Update image")
+    public ResponseEntity<Void> uploadImage(@RequestParam(value = "brandId")Long brandId,
+                                            @RequestParam(value = "attachmentId")Long attachmentId) {
+        LOG.info("Rest request to upload image by attachmentId and imageId");
+        brandService.uploadImage(brandId,attachmentId);
+        return ResponseEntity.ok().build();
+    }
+
+
     /**
      * {@code DELETE  /brands/:id} : delete the "id" brand.
      *

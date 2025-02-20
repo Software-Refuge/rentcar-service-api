@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Brand;
+import uz.carapp.rentcarapp.repository.AttachmentRepository;
 import uz.carapp.rentcarapp.repository.BrandRepository;
 import uz.carapp.rentcarapp.service.BrandService;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
@@ -35,14 +36,16 @@ public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
 
     private final BrandMapper brandMapper;
+    private final AttachmentRepository attachmentRepository;
 
     @Value("${minio.external}")
     private String BASE_URL;
 
 
-    public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper) {
+    public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper, AttachmentRepository attachmentRepository) {
         this.brandRepository = brandRepository;
         this.brandMapper = brandMapper;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @Override
@@ -115,4 +118,11 @@ public class BrandServiceImpl implements BrandService {
         brandRepository.deleteById(id);
     }
 
+    @Override
+    public void uploadImage(Long brandId, Long attachmentId) {
+        LOG.info("Request to upload image by brandId:{} and attachmentId:{}",brandId,attachmentId);
+
+        brandRepository.updateBrandById(brandId,attachmentId);
+        attachmentRepository.deleteById(attachmentId);
+    }
 }

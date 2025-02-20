@@ -79,7 +79,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         return attachment;
     }
 
-    public AttachmentDTO findById(Integer attachmentId) {
+    public AttachmentDTO findById(Long attachmentId) {
         Optional<Attachment> optionalAttachment = attachmentRepository.findById(attachmentId);
         if(optionalAttachment.isPresent()) {
             AttachmentDTO attachmentDTO = attachmentMapper.toDto(optionalAttachment.get());
@@ -88,6 +88,13 @@ public class AttachmentServiceImpl implements AttachmentService {
             return attachmentDTO;
         }
         return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+        log.info("Request to delete Attachment :{}",id);
+        attachmentRepository.findById(id).ifPresent(attachment -> minioService.delete(attachment.getFileName()));
+        attachmentRepository.deleteById(id);
     }
 
     private String getFilePath() {

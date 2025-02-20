@@ -12,4 +12,6 @@ import java.security.NoSuchAlgorithmException;
 public interface AttachmentService {
 
     AttachmentDTO saveFile(MultipartFile file, AttachmentTypeEnum attachmentTypeEnum) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
+
+    void delete(Long id);
 }
