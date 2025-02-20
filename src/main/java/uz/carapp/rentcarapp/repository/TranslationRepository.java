@@ -22,7 +22,7 @@ public interface TranslationRepository extends JpaRepository<Translation, Long> 
 
     @Query("SELECT t.name FROM Translation t WHERE t.entityType = :entityType AND t.name = :name AND t.lang = :lang")
     Optional<String> findTranslationByName(@Param("entityType") String entityType,
-                                     @Param("fieldName") String name,
+                                     @Param("name") String name,
                                      @Param("lang") LanguageEnum lang);
 
 }
