@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.domain.Model;
 import uz.carapp.rentcarapp.domain.ModelAttachment;
-import uz.carapp.rentcarapp.repository.AttachmentRepository;
 import uz.carapp.rentcarapp.repository.ModelAttachmentRepository;
 import uz.carapp.rentcarapp.repository.ModelRepository;
 import uz.carapp.rentcarapp.service.ModelService;
@@ -59,7 +58,7 @@ public class ModelServiceImpl implements ModelService {
         LOG.info("Request to save Model : {}", modelDTO);
         Model model = modelMapper.toEntity(modelDTO);
         model = modelRepository.save(model);
-        return modelMapper.toDto(model);
+        return modelMapper.toDto(model,BASE_URL);
     }
 
     @Override

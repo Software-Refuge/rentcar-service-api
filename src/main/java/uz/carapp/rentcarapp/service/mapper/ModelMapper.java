@@ -3,10 +3,11 @@ package uz.carapp.rentcarapp.service.mapper;
 import org.mapstruct.*;
 import uz.carapp.rentcarapp.domain.Brand;
 import uz.carapp.rentcarapp.domain.Model;
-import uz.carapp.rentcarapp.service.dto.BrandDTO;
-import uz.carapp.rentcarapp.service.dto.ModelDTO;
-import uz.carapp.rentcarapp.service.dto.ModelEditDTO;
-import uz.carapp.rentcarapp.service.dto.ModelSaveDTO;
+import uz.carapp.rentcarapp.service.dto.*;
+
+import java.io.File;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Mapper for the entity {@link Model} and its DTO {@link ModelDTO}.
@@ -30,4 +31,19 @@ public interface ModelMapper extends EntityMapper<ModelDTO, Model> {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Model partialUpdate(@MappingTarget Model model, ModelEditDTO modelEditDTO);
+
+    default ModelDTO toDto(Model model, String BASE_URL) {
+        ModelDTO dto = toDto(model);
+
+        dto.getModelAttachment()
+                .stream()
+                .map(modelAttachmentDTO -> {
+                    AttachmentDTO attachment = modelAttachmentDTO.getAttachment();
+                    attachment.setPath(BASE_URL + File.separator + attachment.getPath());
+                    modelAttachmentDTO.setAttachment(attachment);
+                    return modelAttachmentDTO;
+                }).toList();
+
+        return dto;
+    }
 }

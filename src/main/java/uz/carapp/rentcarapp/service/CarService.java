@@ -2,9 +2,11 @@ package uz.carapp.rentcarapp.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.carapp.rentcarapp.domain.Model;
 import uz.carapp.rentcarapp.service.dto.CarDTO;
 import uz.carapp.rentcarapp.service.dto.CarEditDTO;
 import uz.carapp.rentcarapp.service.dto.CarSaveDTO;
+import uz.carapp.rentcarapp.service.dto.ModelDTO;
 
 import java.util.Optional;
 
