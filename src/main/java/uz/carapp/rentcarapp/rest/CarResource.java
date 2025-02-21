@@ -35,7 +35,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
  * REST controller for managing {@link uz.carapp.rentcarapp.domain.Car}.
  */
 @RestController
-@RequestMapping("/api/merchant/cars")
+@RequestMapping("/api/v1/merchant/cars")
 @CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "*",methods = {POST, GET, PUT, PATCH, DELETE, OPTIONS}, allowedHeaders = "*")
 public class CarResource {
 

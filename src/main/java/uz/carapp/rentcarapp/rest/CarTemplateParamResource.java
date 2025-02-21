@@ -33,7 +33,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
  * REST controller for managing {@link uz.carapp.rentcarapp.domain.CarTemplateParam}.
  */
 @RestController
-@RequestMapping("/api/car-template-params")
+@RequestMapping("/api/v1/car-template-params")
 @CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "*",methods = {POST, GET, PUT, PATCH, DELETE, OPTIONS}, allowedHeaders = "*")
 public class CarTemplateParamResource {
 

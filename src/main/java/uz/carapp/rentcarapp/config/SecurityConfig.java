@@ -40,15 +40,15 @@ public class SecurityConfig {
                             .requestMatchers("/ws/**").permitAll()
                             .requestMatchers("/swagger-ui/**").permitAll()
                             .requestMatchers("/v3/api-docs/**").permitAll()
-                            .requestMatchers("/api/account/auth").permitAll()
-                            .requestMatchers("/api/account/me").authenticated()
-                            .requestMatchers("/api/account/profile").authenticated()
-                            .requestMatchers("/api/account/change-password").authenticated()
+                            .requestMatchers("/api/v1/account/auth").permitAll()
+                            .requestMatchers("/api/v1/account/me").authenticated()
+                            .requestMatchers("/api/v1/account/profile").authenticated()
+                            .requestMatchers("/api/v1/account/change-password").authenticated()
                             .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/actuator/prometheus").permitAll()
-                            .requestMatchers("/api/merchant/auth").permitAll()
-                            .requestMatchers("/api/merchant/me").authenticated()
-                            .requestMatchers("/api/merchant/select-branch").permitAll()
+                            .requestMatchers("/api/v1/merchant/auth").permitAll()
+                            .requestMatchers("/api/v1/merchant/me").authenticated()
+                            .requestMatchers("/api/v1/merchant/select-branch").permitAll()
                             .requestMatchers("/metrics").permitAll()
                             //#--------------Merchant------------------------#
                             .requestMatchers("/api/v1/merchants/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -57,16 +57,16 @@ public class SecurityConfig {
                             //#--------------Brand---------------------------#
                             .requestMatchers("/api/v1/brands").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Account-------------------------#
-                            .requestMatchers("/api/account/create-user").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/account/list").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/account/create-user").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/account/list").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Attachment----------------------#
-                            .requestMatchers("/api/attachments/save-file").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/attachments/save-file").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.OWNER)
                             //#--------------Color---------------------------#
                             .requestMatchers("/api/v1/colors/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Model---------------------------#
                             .requestMatchers("/api/v1/models/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/model-attachments").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/model-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/model-attachments").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/model-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Param---------------------------#
                             .requestMatchers("/api/v1/params/**").hasAnyAuthority(AuthoritiesConstants.ADMIN,AuthoritiesConstants.OWNER)
                             //#--------------ParamValue----------------------#
@@ -74,13 +74,13 @@ public class SecurityConfig {
                             //#--------------Translations--------------------#
                             .requestMatchers("/api/v1/translations/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Car-----------------------------#
-                            .requestMatchers("/api/merchant/cars/**").hasAuthority(AuthoritiesConstants.OWNER)
-                            .requestMatchers("/api/merchant/car-params/**").hasAuthority(AuthoritiesConstants.OWNER)
-                            .requestMatchers("/api/car-templates/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/car-template-params/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/merchant/car-attachments/**").hasAuthority(AuthoritiesConstants.OWNER)
-                            .requestMatchers("/api/merchant/car-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.OWNER)
-                            .requestMatchers("/api/merchant/car-mileages").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/merchant/cars/**").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/merchant/car-params/**").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/car-templates/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/car-template-params/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/merchant/car-attachments/**").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/merchant/car-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/v1/merchant/car-mileages").hasAuthority(AuthoritiesConstants.OWNER)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

@@ -73,7 +73,6 @@ public class TranslationResource {
     /**
      * {@code PATCH  /translations/:id} : Partial updates given fields of an existing translation, field will ignore if it is null
      *
-     * @param id the id of the translationDTO to save.
      * @param translationDTO the translationDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated translationDTO,
      * or with status {@code 400 (Bad Request)} if the translationDTO is not valid,

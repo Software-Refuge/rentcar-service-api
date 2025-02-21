@@ -27,7 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
  * REST controller for managing {@link uz.carapp.rentcarapp.domain.CarMileage}.
  */
 @RestController
-@RequestMapping("/api/merchant/car-mileages")
+@RequestMapping("/api/v1/merchant/car-mileages")
 @CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "*",methods = {POST, GET, PUT, PATCH, DELETE, OPTIONS}, allowedHeaders = "*")
 public class CarMileageResource {
 

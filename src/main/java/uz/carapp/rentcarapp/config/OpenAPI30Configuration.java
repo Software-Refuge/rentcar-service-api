@@ -21,26 +21,26 @@ public class OpenAPI30Configuration {
     @Bean
     public GroupedOpenApi storeOpenApi() {
         String[] path = {
-                "/api/account/auth",
-                "/api/account/me",
-                "/api/account/profile",
-                "/api/account/change-password",
+                "/api/v1/account/auth",
+                "/api/v1/account/me",
+                "/api/v1/account/profile",
+                "/api/v1/account/change-password",
                 "/api/v1/merchants/**",
                 "/api/v1/merchant-branches/**",
                 "/api/v1/brands/**",
-                "/api/account/create-user",
-                "/api/account/list",
-                "/api/attachments/save-file",
+                "/api/v1/account/create-user",
+                "/api/v1/account/list",
+                "/api/v1/attachments/save-file",
                 "/api/v1/models/**",
                 "/api/v1/colors/**",
                 "/api/v1/params/**",
                 "/api/v1/param-values/**",
                 "/api/v1/translations/**",
                 "/api/v1/merchants1/merchant/test/**",
-                "/api/car-templates/**",
-                "/api/car-template-params/**",
-                "/api/model-attachments",
-                "/api/model-attachments/set-main-photo"
+                "/api/v1/car-templates/**",
+                "/api/v1/car-template-params/**",
+                "/api/v1/model-attachments",
+                "/api/v1/model-attachments/set-main-photo"
 
         };
         return GroupedOpenApi.builder()
@@ -50,14 +50,14 @@ public class OpenAPI30Configuration {
     @Bean
     public  GroupedOpenApi merchantOpenApi() {
         String[] merchantPath = {
-                "/api/merchant/auth",
-                "/api/merchant/select-branch",
-                "/api/merchant/me",
-                "/api/merchant/cars/**",
-                "/api/merchant/car-params/**",
-                "/api/merchant/car-attachments/**",
-                "/api/merchant/car-attachments/set-main-photo",
-                "/api/merchant/car-mileages"
+                "/api/v1/merchant/auth",
+                "/api/v1/merchant/select-branch",
+                "/api/v1/merchant/me",
+                "/api/v1/merchant/cars/**",
+                "/api/v1/merchant/car-params/**",
+                "/api/v1/merchant/car-attachments/**",
+                "/api/v1/merchant/car-attachments/set-main-photo",
+                "/api/v1/merchant/car-mileages"
         };
 
         return GroupedOpenApi.builder()

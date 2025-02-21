@@ -34,7 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
  * REST controller for managing {@link uz.carapp.rentcarapp.domain.CarTemplate}.
  */
 @RestController
-@RequestMapping("/api/car-templates")
+@RequestMapping("/api/v1/car-templates")
 @CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "*",methods = {POST, GET, PUT, PATCH, DELETE, OPTIONS}, allowedHeaders = "*")
 public class CarTemplateResource {
 

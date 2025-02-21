@@ -23,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
  * REST controller for managing {@link uz.carapp.rentcarapp.domain.CarAttachment}.
  */
 @RestController
-@RequestMapping("/api/merchant/car-attachments")
+@RequestMapping("/api/v1/merchant/car-attachments")
 @CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "*",methods = {POST, GET, PUT, PATCH, DELETE, OPTIONS}, allowedHeaders = "*")
 public class CarAttachmentResource {
 

@@ -52,7 +52,7 @@ import java.util.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/v1")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600, exposedHeaders = "*",methods = {POST, GET, PUT, PATCH, DELETE, OPTIONS}, allowedHeaders = "*")
 @Tag(name = "Account", description = "The User-moder API. Contains all the operations that can be performed on an account.")

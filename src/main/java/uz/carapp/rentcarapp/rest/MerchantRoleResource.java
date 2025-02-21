@@ -27,7 +27,7 @@ import java.util.Optional;
  * REST controller for managing {@link uz.carapp.rentcarapp.domain.MerchantRole}.
  */
 @RestController
-@RequestMapping("/api/merchant-roles")
+@RequestMapping("/api/v1/merchant-roles")
 public class MerchantRoleResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(MerchantRoleResource.class);
