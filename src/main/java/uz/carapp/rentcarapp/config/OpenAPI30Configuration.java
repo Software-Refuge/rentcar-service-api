@@ -56,7 +56,8 @@ public class OpenAPI30Configuration {
                 "/api/merchant/cars/**",
                 "/api/merchant/car-params/**",
                 "/api/merchant/car-attachments/**",
-                "/api/merchant/car-attachments/set-main-photo"
+                "/api/merchant/car-attachments/set-main-photo",
+                "/api/merchant/car-mileages"
         };
 
         return GroupedOpenApi.builder()

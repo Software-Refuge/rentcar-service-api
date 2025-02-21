@@ -80,6 +80,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/car-template-params/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/merchant/car-attachments/**").hasAuthority(AuthoritiesConstants.OWNER)
                             .requestMatchers("/api/merchant/car-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.OWNER)
+                            .requestMatchers("/api/merchant/car-mileages").hasAuthority(AuthoritiesConstants.OWNER)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(
