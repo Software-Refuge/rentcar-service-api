@@ -113,9 +113,11 @@ public class TranslationResource {
     @GetMapping("")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<TranslationDTO>> getAllTranslations(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<TranslationDTO>> getAllTranslations(
+            @RequestParam(value = "entityId", required = false) Long entityId,
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.info("REST request to get a page of Translations");
-        Page<TranslationDTO> page = translationService.findAll(pageable);
+        Page<TranslationDTO> page = translationService.findAll(entityId,pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

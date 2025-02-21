@@ -40,7 +40,7 @@ public interface TranslationService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<TranslationDTO> findAll(Pageable pageable);
+    Page<TranslationDTO> findAll(Long entityId,Pageable pageable);
 
     /**
      * Get the "id" translation.

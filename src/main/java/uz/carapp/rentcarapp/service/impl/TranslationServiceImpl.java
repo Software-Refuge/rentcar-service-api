@@ -68,9 +68,9 @@ public class TranslationServiceImpl implements TranslationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<TranslationDTO> findAll(Pageable pageable) {
-        LOG.debug("Request to get all Translations");
-        return translationRepository.findAll(pageable).map(translationMapper::toDto);
+    public Page<TranslationDTO> findAll(Long entityId,Pageable pageable) {
+        LOG.info("Request to get all Translations");
+        return translationRepository.findAll(entityId,pageable).map(translationMapper::toDto);
     }
 
     @Override
