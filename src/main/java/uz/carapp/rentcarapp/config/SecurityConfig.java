@@ -65,7 +65,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/colors/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Model---------------------------#
                             .requestMatchers("/api/v1/models/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                            .requestMatchers("/api/v1/model-attachments").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/model-attachments/**").hasAuthority(AuthoritiesConstants.ADMIN)
                             .requestMatchers("/api/v1/model-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.ADMIN)
                             //#--------------Param---------------------------#
                             .requestMatchers("/api/v1/params/**").hasAnyAuthority(AuthoritiesConstants.ADMIN,AuthoritiesConstants.OWNER)

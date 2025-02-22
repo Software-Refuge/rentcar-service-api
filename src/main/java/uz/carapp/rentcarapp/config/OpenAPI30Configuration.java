@@ -39,7 +39,7 @@ public class OpenAPI30Configuration {
                 "/api/v1/merchants1/merchant/test/**",
                 "/api/v1/car-templates/**",
                 "/api/v1/car-template-params/**",
-                "/api/v1/model-attachments",
+                "/api/v1/model-attachments/**",
                 "/api/v1/model-attachments/set-main-photo"
 
         };
