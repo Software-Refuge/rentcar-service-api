@@ -144,14 +144,16 @@ public class ModelAttachmentResource {
      * @param id the id of the modelAttachmentDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-/*    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteModelAttachment(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete ModelAttachment : {}", id);
+        LOG.info("REST request to delete ModelAttachment : {}", id);
         modelAttachmentService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }*/
+    }
 
     @PostMapping("/set-main-photo")
     @SecurityRequirement(name = "bearerAuth")

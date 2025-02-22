@@ -58,7 +58,7 @@ public class ModelServiceImpl implements ModelService {
         LOG.info("Request to save Model : {}", modelDTO);
         Model model = modelMapper.toEntity(modelDTO);
         model = modelRepository.save(model);
-        return modelMapper.toDto(model,BASE_URL);
+        return modelMapper.toDto(model);
     }
 
     @Override

@@ -83,7 +83,7 @@ public class ModelAttachmentServiceImpl implements ModelAttachmentService {
 
     @Override
     public void delete(Long id) {
-        LOG.debug("Request to delete ModelAttachment : {}", id);
+        LOG.info("Request to delete ModelAttachment : {}", id);
         modelAttachmentRepository.deleteById(id);
     }
 
