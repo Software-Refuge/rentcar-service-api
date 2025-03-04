@@ -127,7 +127,15 @@ public class MerchantServiceImpl implements MerchantService {
     @Transactional(readOnly = true)
     public Optional<MerchantDTO> findOne(Long id) {
         LOG.info("Request to get Merchant : {}", id);
-        return merchantRepository.findById(id).map(merchantMapper::toDto);
+        return merchantRepository.findById(id).map(merchantMapper::toDto)
+                .map(merchantDTO -> {
+                    if(merchantDTO.getAttachment()!=null) {
+                        AttachmentDTO attachmentDTO = merchantDTO.getAttachment();
+                        attachmentDTO.setPath(BASE_URL+File.separator+attachmentDTO.getPath());
+                        merchantDTO.setAttachment(attachmentDTO);
+                    }
+                    return merchantDTO;
+                });
     }
 
     @Override
