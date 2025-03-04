@@ -158,7 +158,11 @@ public class MerchantServiceImpl implements MerchantService {
                 .map(merchantDocument -> {
                     Document document = merchantDocument.getDocument();
                     DocumentDTO dto = documentMapper.toDto(document);
-                    dto.setAttachments(attachmentMapper.toDto(docAttachMap.get(document.getId())));
+                    List<AttachmentDTO> dto1 = attachmentMapper.toDto(docAttachMap.get(document.getId())).stream().map(attachment -> {
+                        attachment.setPath(BASE_URL + File.separator + attachment.getPath());
+                        return attachment;
+                    }).toList();
+                    dto.setAttachments(dto1);
                     return dto;
                 }).toList();
 
