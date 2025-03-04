@@ -20,6 +20,7 @@ import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.security.AuthoritiesConstants;
 import uz.carapp.rentcarapp.service.DocumentService;
 import uz.carapp.rentcarapp.service.dto.DocumentDTO;
+import uz.carapp.rentcarapp.service.dto.DocumentSaveDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,7 +57,7 @@ public class DocumentResource {
     /**
      * {@code POST  /documents} : Create a new document.
      *
-     * @param documentDTO the documentDTO to create.
+     * @param documentSaveDTO the documentDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new documentDTO, or with status {@code 400 (Bad Request)} if the document has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -64,9 +65,9 @@ public class DocumentResource {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     @Operation(summary = "Create document")
-    public ResponseEntity<DocumentDTO> createDocument(@RequestBody DocumentDTO documentDTO) throws URISyntaxException {
-        LOG.info("REST request to save Document : {}", documentDTO);
-        documentDTO = documentService.save(documentDTO);
+    public ResponseEntity<DocumentDTO> createDocument(@RequestBody DocumentSaveDTO documentSaveDTO) throws URISyntaxException {
+        LOG.info("REST request to save Document : {}", documentSaveDTO);
+        DocumentDTO documentDTO = documentService.save(documentSaveDTO);
         return ResponseEntity.ok()
             .body(documentDTO);
     }

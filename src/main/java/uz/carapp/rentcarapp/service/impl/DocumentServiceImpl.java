@@ -10,6 +10,7 @@ import uz.carapp.rentcarapp.domain.Document;
 import uz.carapp.rentcarapp.repository.DocumentRepository;
 import uz.carapp.rentcarapp.service.DocumentService;
 import uz.carapp.rentcarapp.service.dto.DocumentDTO;
+import uz.carapp.rentcarapp.service.dto.DocumentSaveDTO;
 import uz.carapp.rentcarapp.service.mapper.DocumentMapper;
 
 import java.util.Optional;
@@ -37,9 +38,9 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public DocumentDTO save(DocumentDTO documentDTO) {
-        LOG.debug("Request to save Document : {}", documentDTO);
-        Document document = documentMapper.toEntity(documentDTO);
+    public DocumentDTO save(DocumentSaveDTO documentSaveDTO) {
+        LOG.info("Request to save Document : {}", documentSaveDTO);
+        Document document = documentMapper.toEntity(documentSaveDTO);
         document = documentRepository.save(document);
         return documentMapper.toDto(document);
     }
