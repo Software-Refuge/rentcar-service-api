@@ -31,4 +31,6 @@ public class MerchantSaveDTO implements Serializable {
     private String address;
 
     private Long userId;
+
+    private Long attachmentId;
 }

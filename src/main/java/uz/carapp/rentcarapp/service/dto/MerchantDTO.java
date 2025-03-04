@@ -31,4 +31,6 @@ public class MerchantDTO implements Serializable {
     private String address;
 
     private UserDTO user;
+
+    private AttachmentDTO attachment;
 }

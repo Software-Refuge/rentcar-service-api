@@ -1,5 +1,6 @@
 package uz.carapp.rentcarapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -49,5 +50,10 @@ public class Merchant extends AbstractAuditingEntity<Long> implements Serializab
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @JsonIgnoreProperties(value = { "merchant" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private Attachment attachment;
 
 }

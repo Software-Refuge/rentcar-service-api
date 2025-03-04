@@ -159,6 +159,17 @@ public class MerchantResource {
             .build();
     }*/
 
+    @PostMapping("/update-image")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @Operation(summary = "Update image")
+    public ResponseEntity<Void> uploadImage(@RequestParam(value = "merchantId")Long merchantId,
+                                            @RequestParam(value = "attachmentId")Long attachmentId) {
+        LOG.info("Rest request to upload image by attachmentId and imageId");
+        merchantService.uploadImage(merchantId,attachmentId);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/merchant/test")
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.OWNER + "\")")

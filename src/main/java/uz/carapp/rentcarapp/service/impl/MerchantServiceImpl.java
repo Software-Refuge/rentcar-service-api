@@ -2,14 +2,16 @@ package uz.carapp.rentcarapp.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import uz.carapp.rentcarapp.domain.Attachment;
 import uz.carapp.rentcarapp.domain.Merchant;
-import uz.carapp.rentcarapp.domain.MerchantRole;
 import uz.carapp.rentcarapp.domain.enumeration.MerchantRoleEnum;
+import uz.carapp.rentcarapp.repository.AttachmentRepository;
 import uz.carapp.rentcarapp.repository.MerchantRepository;
 import uz.carapp.rentcarapp.repository.MerchantRoleRepository;
 import uz.carapp.rentcarapp.repository.UserRepository;
@@ -19,8 +21,8 @@ import uz.carapp.rentcarapp.service.MerchantService;
 import uz.carapp.rentcarapp.service.dto.*;
 import uz.carapp.rentcarapp.service.mapper.MerchantMapper;
 import uz.carapp.rentcarapp.service.mapper.MerchantRoleMapper;
-import uz.carapp.rentcarapp.service.mapper.MerchantRoleMapperImpl;
 
+import java.io.File;
 import java.util.Optional;
 
 /**
@@ -40,16 +42,24 @@ public class MerchantServiceImpl implements MerchantService {
     private final UserDetailsServiceImpl userDetailsService;
     private final MerchantRoleMapper merchantRoleMapper;
 
+    private final AttachmentRepository attachmentRepository;
+    private final AttachmentService attachmentService;
+
+    @Value("${minio.external}")
+    private String BASE_URL;
+
     public MerchantServiceImpl(
             MerchantRepository merchantRepository,
             MerchantMapper merchantMapper,
-            UserRepository userRepository, MerchantRoleRepository merchantRoleRepository, UserDetailsServiceImpl userDetailsService, MerchantRoleMapper merchantRoleMapper) {
+            UserRepository userRepository, MerchantRoleRepository merchantRoleRepository, UserDetailsServiceImpl userDetailsService, MerchantRoleMapper merchantRoleMapper, AttachmentRepository attachmentRepository, AttachmentService attachmentService) {
         this.merchantRepository = merchantRepository;
         this.merchantMapper = merchantMapper;
         this.userRepository = userRepository;
         this.merchantRoleRepository = merchantRoleRepository;
         this.userDetailsService = userDetailsService;
         this.merchantRoleMapper = merchantRoleMapper;
+        this.attachmentRepository = attachmentRepository;
+        this.attachmentService = attachmentService;
     }
 
     @Override
@@ -100,7 +110,17 @@ public class MerchantServiceImpl implements MerchantService {
         LOG.info("Request to get all Merchants");
         if(StringUtils.hasText(search))
             search = search.toLowerCase();
-        return merchantRepository.findAll(search, pageable).map(merchantMapper::toDto);
+        Page<Merchant> page = merchantRepository.findAll(search, pageable);
+
+        return page.map(merchantMapper::toDto)
+                .map(merchantDTO -> {
+                    AttachmentDTO attachment = merchantDTO.getAttachment();
+                    if(attachment != null) {
+                        attachment.setPath(BASE_URL + File.separator + attachment.getPath());
+                        merchantDTO.setAttachment(attachment);
+                    }
+                    return merchantDTO;
+                });
     }
 
     @Override
@@ -114,5 +134,27 @@ public class MerchantServiceImpl implements MerchantService {
     public void delete(Long id) {
         LOG.info("Request to delete Merchant : {}", id);
         merchantRepository.deleteById(id);
+    }
+
+    @Override
+    public void uploadImage(Long merchantId, Long attachmentId) {
+        LOG.info("Request to upload image by merchantId:{} and attachmentId:{}",merchantId,attachmentId);
+
+        Merchant merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new BadRequestCustomException("Merchant not found","",""));
+
+        if(merchant.getAttachment()!=null) {
+            Long oldAttachmentId = merchant.getAttachment().getId();
+            merchant.setAttachment(null);
+            merchantRepository.save(merchant);
+            attachmentService.delete(oldAttachmentId);
+        }
+
+        // Yangi attachmentni o‘rnatish
+        Attachment newAttachment = attachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new BadRequestCustomException("Attachment not found","",""));
+
+        merchant.setAttachment(newAttachment);
+        merchantRepository.save(merchant);
     }
 }
