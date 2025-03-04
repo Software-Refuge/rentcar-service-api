@@ -144,7 +144,7 @@ public class MerchantServiceImpl implements MerchantService {
         List<MerchantDocument> merchantDocuments = merchantDocumentRepository.findAllDocumentsByMerchantId(id);
 
         List<Long> docIds = merchantDocuments.stream()
-                .map(merchantDocument -> merchantDocument.getMerchant().getId())
+                .map(merchantDocument -> merchantDocument.getDocument().getId())
                 .toList();
 
         Map<Long,List<Attachment>> docAttachMap = docAttachmentRepository.getAttachmentsByDocIds(docIds)
