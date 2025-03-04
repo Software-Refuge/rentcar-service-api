@@ -15,12 +15,6 @@ import java.util.List;
 @Repository
 public interface MerchantDocumentRepository extends JpaRepository<MerchantDocument, Long> {
 
-    @Query("""
-        SELECT md 
-        FROM MerchantDocument md
-        JOIN FETCH Document d
-        LEFT JOIN FETCH Attachment a
-        WHERE md.merchant.id = :merchantId
-    """)
+    @Query(value = "SELECT md FROM MerchantDocument md WHERE md.merchant.id = :merchantId")
     List<MerchantDocument> findAllDocumentsByMerchantId(@Param("merchantId") Long merchantId);
 }
