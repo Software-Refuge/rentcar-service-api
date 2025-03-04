@@ -8,22 +8,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import uz.carapp.rentcarapp.domain.Attachment;
-import uz.carapp.rentcarapp.domain.Merchant;
+import uz.carapp.rentcarapp.domain.*;
 import uz.carapp.rentcarapp.domain.enumeration.MerchantRoleEnum;
-import uz.carapp.rentcarapp.repository.AttachmentRepository;
-import uz.carapp.rentcarapp.repository.MerchantRepository;
-import uz.carapp.rentcarapp.repository.MerchantRoleRepository;
-import uz.carapp.rentcarapp.repository.UserRepository;
+import uz.carapp.rentcarapp.repository.*;
 import uz.carapp.rentcarapp.rest.errors.BadRequestCustomException;
 import uz.carapp.rentcarapp.security.UserDetailsServiceImpl;
 import uz.carapp.rentcarapp.service.MerchantService;
 import uz.carapp.rentcarapp.service.dto.*;
-import uz.carapp.rentcarapp.service.mapper.MerchantMapper;
-import uz.carapp.rentcarapp.service.mapper.MerchantRoleMapper;
+import uz.carapp.rentcarapp.service.mapper.*;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service Implementation for managing {@link Merchant}.
@@ -44,6 +44,14 @@ public class MerchantServiceImpl implements MerchantService {
 
     private final AttachmentRepository attachmentRepository;
     private final AttachmentService attachmentService;
+    private final MerchantDocumentRepository merchantDocumentRepository;
+
+    private final MerchantDocumentMapper merchantDocumentMapper;
+
+    private final AttachmentMapper attachmentMapper;
+
+    private final DocumentMapper documentMapper;
+    private final DocAttachmentRepository docAttachmentRepository;
 
     @Value("${minio.external}")
     private String BASE_URL;
@@ -51,7 +59,7 @@ public class MerchantServiceImpl implements MerchantService {
     public MerchantServiceImpl(
             MerchantRepository merchantRepository,
             MerchantMapper merchantMapper,
-            UserRepository userRepository, MerchantRoleRepository merchantRoleRepository, UserDetailsServiceImpl userDetailsService, MerchantRoleMapper merchantRoleMapper, AttachmentRepository attachmentRepository, AttachmentService attachmentService) {
+            UserRepository userRepository, MerchantRoleRepository merchantRoleRepository, UserDetailsServiceImpl userDetailsService, MerchantRoleMapper merchantRoleMapper, AttachmentRepository attachmentRepository, AttachmentService attachmentService, MerchantDocumentRepository merchantDocumentRepository, MerchantDocumentMapper merchantDocumentMapper, AttachmentMapper attachmentMapper, DocumentMapper documentMapper, DocAttachmentRepository docAttachmentRepository) {
         this.merchantRepository = merchantRepository;
         this.merchantMapper = merchantMapper;
         this.userRepository = userRepository;
@@ -60,6 +68,11 @@ public class MerchantServiceImpl implements MerchantService {
         this.merchantRoleMapper = merchantRoleMapper;
         this.attachmentRepository = attachmentRepository;
         this.attachmentService = attachmentService;
+        this.merchantDocumentRepository = merchantDocumentRepository;
+        this.merchantDocumentMapper = merchantDocumentMapper;
+        this.attachmentMapper = attachmentMapper;
+        this.documentMapper = documentMapper;
+        this.docAttachmentRepository = docAttachmentRepository;
     }
 
     @Override
@@ -127,15 +140,38 @@ public class MerchantServiceImpl implements MerchantService {
     @Transactional(readOnly = true)
     public Optional<MerchantDTO> findOne(Long id) {
         LOG.info("Request to get Merchant : {}", id);
+
+        List<MerchantDocument> merchantDocuments = merchantDocumentRepository.findAllDocumentsByMerchantId(id);
+
+        List<Long> docIds = merchantDocuments.stream()
+                .map(merchantDocument -> merchantDocument.getMerchant().getId())
+                .toList();
+
+        Map<Long,List<Attachment>> docAttachMap = docAttachmentRepository.getAttachmentsByDocIds(docIds)
+                        .stream()
+                                .collect(Collectors.groupingBy(docAttachment -> docAttachment.getDocument().getId(),
+                                        Collectors.mapping(DocAttachment::getAttachment,Collectors.toList())));
+
+
+        //get all attachments by docIds
+        List<DocumentDTO> list = merchantDocuments.stream()
+                .map(merchantDocument -> {
+                    Document document = merchantDocument.getDocument();
+                    DocumentDTO dto = documentMapper.toDto(document);
+                    dto.setAttachments(attachmentMapper.toDto(docAttachMap.get(document.getId())));
+                    return dto;
+                }).toList();
+
         return merchantRepository.findById(id).map(merchantMapper::toDto)
-                .map(merchantDTO -> {
-                    if(merchantDTO.getAttachment()!=null) {
-                        AttachmentDTO attachmentDTO = merchantDTO.getAttachment();
-                        attachmentDTO.setPath(BASE_URL+File.separator+attachmentDTO.getPath());
-                        merchantDTO.setAttachment(attachmentDTO);
-                    }
-                    return merchantDTO;
-                });
+            .map(merchantDTO -> {
+                if(merchantDTO.getAttachment()!=null) {
+                    AttachmentDTO attachmentDTO = merchantDTO.getAttachment();
+                    attachmentDTO.setPath(BASE_URL+File.separator+attachmentDTO.getPath());
+                    merchantDTO.setAttachment(attachmentDTO);
+                }
+                merchantDTO.setDocuments(list);
+                return merchantDTO;
+            });
     }
 
     @Override

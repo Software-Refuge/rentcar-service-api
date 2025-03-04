@@ -40,7 +40,10 @@ public class OpenAPI30Configuration {
                 "/api/v1/car-templates/**",
                 "/api/v1/car-template-params/**",
                 "/api/v1/model-attachments/**",
-                "/api/v1/model-attachments/set-main-photo"
+                "/api/v1/model-attachments/set-main-photo",
+                "/api/v1/documents",
+                "/api/v1/doc-attachments",
+                "/api/v1/merchant-documents"
 
         };
         return GroupedOpenApi.builder()

@@ -6,5 +6,5 @@ public enum AttachmentTypeEnum {
     CAR_ATTACHMENT,
     MODEL_ATTACHMENT,
     MERCHANT_LOGO,
-    MERCHANT_DOC
+    DOCUMENT_FILE
 }

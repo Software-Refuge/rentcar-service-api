@@ -1,5 +1,6 @@
 package uz.carapp.rentcarapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,15 +10,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import java.io.Serializable;
 
 /**
- * A Attachment.
+ * A DocAttachment.
  */
 @Entity
-@Table(name = "attachment")
+@Table(name = "doc_attachment")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
-public class Attachment extends AbstractAuditingEntity<Long> implements Serializable {
+public class DocAttachment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,18 +28,10 @@ public class Attachment extends AbstractAuditingEntity<Long> implements Serializ
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "file_name")
-    private String fileName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Document document;
 
-    @Column(name = "file_size")
-    private Integer fileSize;
-
-    @Column(name = "original_file_name")
-    private String originalFileName;
-
-    @Column(name = "path")
-    private String path;
-
-    @Column(name = "ext")
-    private String ext;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "brand" }, allowSetters = true)
+    private Attachment attachment;
 }

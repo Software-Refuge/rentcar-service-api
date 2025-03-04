@@ -81,6 +81,10 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/merchant/car-attachments/**").hasAuthority(AuthoritiesConstants.OWNER)
                             .requestMatchers("/api/v1/merchant/car-attachments/set-main-photo").hasAuthority(AuthoritiesConstants.OWNER)
                             .requestMatchers("/api/v1/merchant/car-mileages").hasAuthority(AuthoritiesConstants.OWNER)
+                            //#---------------Document----------------------#
+                            .requestMatchers("/api/v1/documents").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/doc-attachments").hasAuthority(AuthoritiesConstants.ADMIN)
+                            .requestMatchers("/api/v1/merchant-documents").hasAuthority(AuthoritiesConstants.ADMIN)
                             .anyRequest()
                             .authenticated())
             .exceptionHandling(

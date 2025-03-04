@@ -3,8 +3,10 @@ package uz.carapp.rentcarapp.service.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import uz.carapp.rentcarapp.domain.Document;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -33,4 +35,6 @@ public class MerchantDTO implements Serializable {
     private UserDTO user;
 
     private AttachmentDTO attachment;
+
+    private List<DocumentDTO> documents;
 }
