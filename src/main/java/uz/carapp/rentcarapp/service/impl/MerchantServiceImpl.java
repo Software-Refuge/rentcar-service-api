@@ -159,17 +159,17 @@ public class MerchantServiceImpl implements MerchantService {
                     List<AttachmentDTO> dto1 = attachmentMapper.toDto(docAttachMap.getOrDefault(document.getId(),Collections.emptyList()))
                             .stream()
                             .peek(attachment -> {
-                                attachment.setPath(BASE_URL + File.separator + attachment.getPath());
+                                attachment.setPath(BASE_URL + "/" + attachment.getPath());
                     }).collect(Collectors.toList());
                     dto.setAttachments(dto1);
                     return dto;
                 }).collect(Collectors.toList());
 
         return merchantRepository.findById(id)
-                .map(merchantMapper::toDto)
-                .map(merchantDTO -> {
+                .map(merchant -> {
+                    MerchantDTO merchantDTO = merchantMapper.toDto(merchant);
                     Optional.ofNullable(merchantDTO.getAttachment()).ifPresent(attachmentDTO ->
-                            attachmentDTO.setPath(BASE_URL + File.separator + attachmentDTO.getPath()));
+                            attachmentDTO.setPath(BASE_URL + "/" + attachmentDTO.getPath()));
                 merchantDTO.setDocuments(list);
                 return merchantDTO;
             });
@@ -182,13 +182,14 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
+    @Transactional
     public void uploadImage(Long merchantId, Long attachmentId) {
         LOG.info("Request to upload image by merchantId:{} and attachmentId:{}",merchantId,attachmentId);
 
         Merchant merchant = merchantRepository.findById(merchantId)
                 .orElseThrow(() -> new BadRequestCustomException("Merchant not found","",""));
 
-        if(merchant.getAttachment()!=null) {
+        if(merchant.getAttachment() != null) {
             Long oldAttachmentId = merchant.getAttachment().getId();
             merchant.setAttachment(null);
             merchantRepository.save(merchant);
