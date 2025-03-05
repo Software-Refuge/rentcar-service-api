@@ -118,19 +118,20 @@ public class MerchantServiceImpl implements MerchantService {
     @Transactional(readOnly = true)
     public Page<MerchantDTO> findAll(String search, Pageable pageable) {
         LOG.info("Request to get all Merchants");
-        if(StringUtils.hasText(search))
-            search = search.toLowerCase();
+
+        if(StringUtils.hasText(search)) {
+            search = StringUtils.trimAllWhitespace(search).toLowerCase();
+        }
+
         Page<Merchant> page = merchantRepository.findAll(search, pageable);
 
-        return page.map(merchantMapper::toDto)
-                .map(merchantDTO -> {
-                    AttachmentDTO attachment = merchantDTO.getAttachment();
-                    if(attachment != null) {
-                        attachment.setPath(BASE_URL + File.separator + attachment.getPath());
-                        merchantDTO.setAttachment(attachment);
-                    }
-                    return merchantDTO;
-                });
+        return page.map(merchant -> {
+            MerchantDTO merchantDTO = merchantMapper.toDto(merchant);
+            if(merchantDTO.getAttachment() != null) {
+                merchantDTO.getAttachment().setPath(BASE_URL + '/' + merchantDTO.getAttachment().getPath());
+            }
+            return merchantDTO;
+        });
     }
 
     @Override
