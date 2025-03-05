@@ -18,10 +18,7 @@ import uz.carapp.rentcarapp.service.dto.*;
 import uz.carapp.rentcarapp.service.mapper.*;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -147,32 +144,31 @@ public class MerchantServiceImpl implements MerchantService {
                 .map(merchantDocument -> merchantDocument.getDocument().getId())
                 .toList();
 
-        Map<Long,List<Attachment>> docAttachMap = docAttachmentRepository.getAttachmentsByDocIds(docIds)
+        Map<Long,List<Attachment>> docAttachMap = docIds.isEmpty()?Collections.emptyMap()
+                :docAttachmentRepository.getAttachmentsByDocIds(docIds)
                         .stream()
                                 .collect(Collectors.groupingBy(docAttachment -> docAttachment.getDocument().getId(),
                                         Collectors.mapping(DocAttachment::getAttachment,Collectors.toList())));
-
 
         //get all attachments by docIds
         List<DocumentDTO> list = merchantDocuments.stream()
                 .map(merchantDocument -> {
                     Document document = merchantDocument.getDocument();
                     DocumentDTO dto = documentMapper.toDto(document);
-                    List<AttachmentDTO> dto1 = attachmentMapper.toDto(docAttachMap.get(document.getId())).stream().map(attachment -> {
-                        attachment.setPath(BASE_URL + File.separator + attachment.getPath());
-                        return attachment;
-                    }).toList();
+                    List<AttachmentDTO> dto1 = attachmentMapper.toDto(docAttachMap.getOrDefault(document.getId(),Collections.emptyList()))
+                            .stream()
+                            .peek(attachment -> {
+                                attachment.setPath(BASE_URL + File.separator + attachment.getPath());
+                    }).collect(Collectors.toList());
                     dto.setAttachments(dto1);
                     return dto;
-                }).toList();
+                }).collect(Collectors.toList());
 
-        return merchantRepository.findById(id).map(merchantMapper::toDto)
-            .map(merchantDTO -> {
-                if(merchantDTO.getAttachment()!=null) {
-                    AttachmentDTO attachmentDTO = merchantDTO.getAttachment();
-                    attachmentDTO.setPath(BASE_URL+File.separator+attachmentDTO.getPath());
-                    merchantDTO.setAttachment(attachmentDTO);
-                }
+        return merchantRepository.findById(id)
+                .map(merchantMapper::toDto)
+                .map(merchantDTO -> {
+                    Optional.ofNullable(merchantDTO.getAttachment()).ifPresent(attachmentDTO ->
+                            attachmentDTO.setPath(BASE_URL + File.separator + attachmentDTO.getPath()));
                 merchantDTO.setDocuments(list);
                 return merchantDTO;
             });
