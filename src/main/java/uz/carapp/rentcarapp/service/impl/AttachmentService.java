@@ -14,7 +14,6 @@ import uz.carapp.rentcarapp.service.MinioService;
 import uz.carapp.rentcarapp.service.dto.AttachmentDTO;
 import uz.carapp.rentcarapp.service.mapper.AttachmentMapper;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -96,11 +95,11 @@ public class AttachmentService implements uz.carapp.rentcarapp.service.Attachmen
     }
 
     private String getFilePath() {
-        return BASE_URL + File.separator + BUCKET_NAME + File.separator;
+        return BASE_URL + "/" + BUCKET_NAME + "/";
     }
 
     private String getPath() {
-        return BUCKET_NAME + File.separator;
+        return BUCKET_NAME + "/";
     }
 
     private String getFileExtension(String fileName) {
