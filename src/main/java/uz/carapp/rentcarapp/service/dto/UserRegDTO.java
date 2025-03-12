@@ -21,4 +21,5 @@ public class UserRegDTO {
     private boolean status;
     private String password;
     private Set<String> roles;
+    private Instant createdDate;
 }

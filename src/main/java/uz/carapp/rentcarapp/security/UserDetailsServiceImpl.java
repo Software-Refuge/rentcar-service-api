@@ -220,6 +220,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userRegDTO.setStatus(user.isStatus());
             userRegDTO.setPhone(user.getPhone());
             userRegDTO.setRoles(user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
+            userRegDTO.setCreatedDate(user.getCreatedDate());
             return userRegDTO;
         }).stream().toList();
         return new PageImpl<>(list);
